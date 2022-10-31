@@ -5,15 +5,16 @@ export interface UserInput {
   email: string;
   name: string;
   password: string;
+  
+}
+export interface UserDocument extends UserInput, mongoose.Document {
+  createdAt: Date;
+  updatedAt: Date;
   coverPic: string;
   profilePic: string;
   followers: string[];
   following: string[];
   isAdmin: boolean;
-}
-export interface UserDocument extends UserInput, mongoose.Document {
-  createdAt: Date;
-  updatedAt: Date;
   comparePassword(candidatePassword: string): Promise<Boolean>;
 }
 
@@ -49,7 +50,7 @@ UserSchema.pre("save", async function (next) {
   if (!user.isModified("password")) {
     return next();
   }
-  const salt = await bcrypt.genSalt(config.get<number>("saltlength"));
+  const salt = await bcrypt.genSalt(config.get<any>("saltlength"));
   const hash = await bcrypt.hashSync(user.password, salt);
   user.password = hash;
   return next();
@@ -66,4 +67,5 @@ UserSchema.methods.comparePassword = async function (
 };
 
 
-module.exports=mongoose.model("User",UserSchema)
+const UserModel = mongoose.model<UserDocument>("User", UserSchema);
+export default UserModel

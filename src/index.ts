@@ -4,6 +4,7 @@ import dotenv from 'dotenv'
 import connect  from './utils/connect';
 import postRoute from './routes/posts'
 import userRoute from './routes/users'
+import authRoute from './routes/auth'
 import helmet from 'helmet'
 import morgan  from  'morgan'
 
@@ -17,8 +18,8 @@ app.use(helmet())
 app.use(morgan('common'))
 app.use('/api/posts',postRoute)
 app.use('/api/users',userRoute)
-app.use('/api/users',userRoute)
-app.use('/api/users',userRoute)
+app.use('/api/auth',authRoute)
+
 
 
 app.listen(port,async()=>{
