@@ -1,5 +1,7 @@
 import express,{Request,Response} from 'express'
-import { createUser } from '../services/user.service'
+import validateResource from '../middleware/validateResource';
+import { createUserSchema } from '../schema/users.schema';
+import { createUser } from '../services/auth.service'
 
 
 
@@ -7,7 +9,7 @@ const router=express.Router()
 
 
 /* -------------------------------- Register -------------------------------- */
-router.get('/register',async(req:Request,res:Response)=>{
+router.get('/register',validateResource(createUserSchema),async(req:Request,res:Response)=>{
  const user=await createUser(req.body);
  res.json(user)
 })

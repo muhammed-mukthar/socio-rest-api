@@ -1,5 +1,5 @@
 import dotenv from 'dotenv'
-import { number } from 'zod'
+
 dotenv.config()
 
 export default{
