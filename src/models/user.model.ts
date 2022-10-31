@@ -1,6 +1,9 @@
 import mongoose, { model } from "mongoose";
 import bcrypt from "bcrypt";
 import config from "config";
+
+
+
 export interface UserInput {
   email: string;
   name: string;

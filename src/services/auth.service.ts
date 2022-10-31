@@ -1,21 +1,40 @@
-
 import { omit } from "lodash";
-import UserModel, { UserInput } from "../models/user.model";
+import UserModel, {  UserInput } from "../models/user.model";
 
 
+/* ------------------------------- create user ------------------------------ */
+export async function createUser(input: UserInput) {
+  try {
+    const user = await UserModel.create(input);
 
-export async function createUser(input:UserInput) {
+    return omit(user.toJSON(), "password");
+  } catch (err: any) {
+    console.log("err", err);
+
+    return err;
+  }
+}
+
+
+export async function loginUser({
+    email,
+    password,
+  }: {
+    email: string;
+    password: string;
+  }) {
     try{
-        console.log('input',input);
-        
-const user=await UserModel.create(input)
-console.log('user creating',user);
-
-    return omit(user.toJSON(),'password')
-    }catch(err:any){
-        console.log('err',err);
-        
-return (err)
+ const user=await UserModel.findOne({email})
+    if(!user){
+        return false
     }
+    const isValid=await user.comparePassword(password)
+  if (!isValid) return false
     
+  return omit(user.toJSON(),'password')
+    }catch(err:any){
+return false
+    }
+   
+ 
 }
