@@ -1,6 +1,7 @@
 import SessionModel from "../models/session.model";
+import {ObjectId} from "mongoose";
 
-export async function createSession(userId: string, userAgent: string) {
+export async function createSession(userId:any , userAgent: string) {
     try {
       const session = await SessionModel.create({ user: userId, userAgent });
     if (!session)  return  false

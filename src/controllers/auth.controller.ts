@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import { createSessionSchema } from "../schema/session.schema";
 import {  createUser, loginUser } from "../services/auth.service";
 import { createSession } from "../services/session.service";
+import { generateAccessToken, generateRefreshToken } from "../utils/jwt.utils";
 
 
 /* ------------------------------- create user ------------------------------ */
@@ -19,12 +20,19 @@ export async function createUserHandler(req:Request,res:Response) {
 /* ------------------------------- login user ------------------------------- */
     
 export async function loginUserHandler(req:Request,res:Response) {
-let user=await loginUser(req.body)
-    if(user){
-        const session=await createSession(user._id,req.get("user-agent")|| "")
-        res.json(user)
-    }else{
+let user=await loginUser(req.body)//get users details
+    if(!user){
         res.status(404).json('user not found')
+    }else{
+        const session=await createSession(user._id,req.get("user-agent")|| "")//create session
+        if(!session) return res.json('user cannot be created')
+        let userDetails:object={
+            id:user._id,
+            email:user.email
+        }
+        const accessToken=generateAccessToken(userDetails,session._id)
+        const refreshToken=generateRefreshToken(userDetails,session._id)
+        res.json({accessToken,refreshToken})
     }
  
     
