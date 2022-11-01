@@ -2,7 +2,7 @@
 import { Request, Response } from "express";
 import { createSessionSchema } from "../schema/session.schema";
 import {  createUser, loginUser } from "../services/auth.service";
-import { createSession } from "../services/session.service";
+
 import { generateAccessToken, generateRefreshToken } from "../utils/jwt.utils";
 
 
@@ -24,14 +24,13 @@ let user=await loginUser(req.body)//get users details
     if(!user){
         res.status(404).json('user not found')
     }else{
-        const session=await createSession(user._id,req.get("user-agent")|| "")//create session
-        if(!session) return res.json('user cannot be created')
+
         let userDetails:object={
             id:user._id,
             email:user.email
         }
-        const accessToken=generateAccessToken(userDetails,session._id)
-        const refreshToken=generateRefreshToken(userDetails,session._id)
+        const accessToken=generateAccessToken(userDetails)
+        const refreshToken=generateRefreshToken(userDetails)
         res.json({accessToken,refreshToken})
     }
  

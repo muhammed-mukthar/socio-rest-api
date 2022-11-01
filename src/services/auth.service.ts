@@ -1,5 +1,5 @@
 import { omit } from "lodash";
-import SessionModel from "../models/session.model";
+
 import UserModel, { UserInput } from "../models/user.model";
 
 /* ------------------------------- create user ------------------------------ */
