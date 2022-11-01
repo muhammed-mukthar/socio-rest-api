@@ -1,6 +1,6 @@
 import { omit } from "lodash";
-import UserModel, {  UserInput } from "../models/user.model";
-
+import SessionModel from "../models/session.model";
+import UserModel, { UserInput } from "../models/user.model";
 
 /* ------------------------------- create user ------------------------------ */
 export async function createUser(input: UserInput) {
@@ -15,26 +15,25 @@ export async function createUser(input: UserInput) {
   }
 }
 
-
 export async function loginUser({
-    email,
-    password,
-  }: {
-    email: string;
-    password: string;
-  }) {
-    try{
- const user=await UserModel.findOne({email})
-    if(!user){
-        return false
+  email,
+  password,
+}: {
+  email: string;
+  password: string;
+}) {
+  try {
+    const user = await UserModel.findOne({ email });
+    if (!user) {
+      return false;
     }
-    const isValid=await user.comparePassword(password)
-  if (!isValid) return false
-    
-  return omit(user.toJSON(),'password')
-    }catch(err:any){
-return false
-    }
-   
- 
+    const isValid = await user.comparePassword(password);
+    if (!isValid) return false;
+
+    return omit(user.toJSON(), "password");
+  } catch (err: any) {
+    return false;
+  }
 }
+
+

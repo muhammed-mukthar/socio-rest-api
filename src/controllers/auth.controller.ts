@@ -1,6 +1,8 @@
 
 import { Request, Response } from "express";
-import { createUser, loginUser } from "../services/auth.service";
+import { createSessionSchema } from "../schema/session.schema";
+import {  createUser, loginUser } from "../services/auth.service";
+import { createSession } from "../services/session.service";
 
 
 /* ------------------------------- create user ------------------------------ */
@@ -17,13 +19,14 @@ export async function createUserHandler(req:Request,res:Response) {
 /* ------------------------------- login user ------------------------------- */
     
 export async function loginUserHandler(req:Request,res:Response) {
- loginUser(req.body).then((result)=>{
-    if(result){
-        res.json(result)
+let user=await loginUser(req.body)
+    if(user){
+        const session=await createSession(user._id,req.get("user-agent")|| "")
+        res.json(user)
     }else{
         res.status(404).json('user not found')
     }
- })
+ 
     
 }
       
