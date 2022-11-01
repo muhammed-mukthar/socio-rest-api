@@ -1,6 +1,9 @@
 import { omit } from "lodash";
+import config from "config";
 
 import UserModel, { UserInput } from "../models/user.model";
+import { generateAccessToken, verifyJwt } from "../utils/jwt.utils";
+import { findUser } from "./user.service";
 
 /* ------------------------------- create user ------------------------------ */
 export async function createUser(input: UserInput) {
@@ -36,4 +39,28 @@ export async function loginUser({
   }
 }
 
+const refreshTokenSecret=config.get<string >('refreshTokenSecret')
 
+export async function reIssueAccessToken({
+  refreshToken,
+}: {
+  refreshToken: string;
+}) {
+  const { decoded } = verifyJwt(refreshToken, 'refreshTokenSecret');
+
+  if (!decoded ) return false;
+
+//@ts-ignore
+  const user = await findUser({ _id: decoded._id });
+
+  if (!user) return false;
+
+
+  let userDetails:object={
+    id:user._id,
+    email:user.email
+}
+  const accessToken = generateAccessToken(userDetails)
+
+  return accessToken;
+}

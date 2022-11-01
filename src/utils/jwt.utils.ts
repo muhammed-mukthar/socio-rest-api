@@ -1,4 +1,4 @@
-import jwt from 'jsonwebtoken'
+import jwt, { JwtPayload } from 'jsonwebtoken'
 import config from "config";
 
 const accessTokenSecret=config.get<string >('accessTokenSecret')
@@ -26,6 +26,8 @@ export function generateAccessToken(user:object)  {
   
     try {
       const decoded = jwt.verify(token, publicKey);
+      console.log('decoded',decoded);
+      
       return {
         valid: true,
         expired: false,
