@@ -34,7 +34,5 @@ let user=await loginUser(req.body)//get users details
         const refreshToken=generateRefreshToken(userDetails)
         res.json({accessToken,refreshToken})
     }
- 
-    
 }
-      
+    

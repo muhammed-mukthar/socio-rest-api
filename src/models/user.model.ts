@@ -1,6 +1,7 @@
 import mongoose, { model } from "mongoose";
 import bcrypt from "bcrypt";
 import config from "config";
+import { type } from "os";
 
 
 
@@ -18,6 +19,10 @@ export interface UserDocument extends UserInput, mongoose.Document {
   followers: string[];
   following: string[];
   isAdmin: boolean;
+  desc:string;
+  city:string,
+  relationship:number;
+
   comparePassword(candidatePassword: string): Promise<Boolean>;
 }
 
@@ -40,6 +45,22 @@ const UserSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    desc:{
+        type:String,
+        max:50,
+        default:""
+      },
+      city:{
+        type:String,
+        max:50,
+        default:"",
+      },
+      relationship:{
+        type:Number,
+        enum:[1,2,3],
+        default:""
+      }
+    ,
   },
   {
     timestamps: true,
@@ -69,7 +90,15 @@ UserSchema.methods.comparePassword = async function (
     return bcrypt.compare(passwordInput,user.password).catch((e)=>false)
 };
 
-
+UserSchema.methods.changePassword=async function (
+  passwordInput: string
+): Promise<string> {
+    const user =this as UserDocument
+    const salt = await bcrypt.genSalt(config.get<any>("saltlength"));
+  const hash = await bcrypt.hashSync(passwordInput, salt);
+  user.password = hash;
+    return hash
+};
 
 const UserModel = mongoose.model<UserDocument>("User", UserSchema);
 export default UserModel
