@@ -1,19 +1,13 @@
 import express,{Request,Response} from 'express'
+import { updateUserHandler } from '../controllers/users.controller'
+import UserModel from '../models/user.model'
 
 const router=express.Router()
 
 
 /* ------------------------------- update user ------------------------------ */
 
-router.put(':/id',async(req:Request,res:Response)=>{
-if(req.body.userId ===req.params.id || res.locals.user.id){
-if(req.body.password){
-  
-}
-}else{
-    return res.status(403).json('you can only update your account')
-}
-})
+router.put('/:id',updateUserHandler)
 /* ------------------------------- delete user ------------------------------ */
 
 /* ------------------------------- get a user ------------------------------- */
