@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { omit } from "lodash";
-import { UserDocument } from "../models/user.model";
+import UserModel, { UserDocument } from "../models/user.model";
+
 
 import { DeleteUser, findUser, UpdateUser } from "../services/user.service";
 
@@ -67,4 +68,30 @@ export async function getUserHandler(req:Request,res:Response){
     }
    
 
+}
+
+
+/* ------------------------------ follow a user ----------------------------- */
+
+
+export async function followHandler(req:Request,res:Response){
+  if(req.body.userId !== req.params.id){
+    try{
+      const user=await findUser({_id:req.params.id})
+      const currentUser=await findUser({_id:req.body.userId})
+      if(!user?.followers.includes(req.body.userId)){
+        await UpdateUser({_id:req.params.id},{$push:{followers:req.body.userId}})
+        await UpdateUser({_id:req.body.userId},{$push:{following:req.params.id}})
+        res.send('user has been followed')
+      }else{
+        res.status(403).json('you already follow this user')
+      }
+      
+    }catch(err){
+      res.status(500).json(err)
+    }
+
+  }else{
+    res.status(403).json('you cant follow yourself')
+  }
 }
