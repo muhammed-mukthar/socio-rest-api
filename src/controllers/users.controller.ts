@@ -85,8 +85,7 @@ export async function followHandler(req:Request,res:Response){
         res.send('user has been followed')
       }else{
         res.status(403).json('you already follow this user')
-      }
-      
+      }    
     }catch(err){
       res.status(500).json(err)
     }
@@ -94,4 +93,26 @@ export async function followHandler(req:Request,res:Response){
   }else{
     res.status(403).json('you cant follow yourself')
   }
+}
+
+export async function unfollowHandler(req:Request,res:Response) {
+  if(req.body.userId !== req.params.id){
+    try{
+      const user=await findUser({_id:req.params.id})
+      const currentUser=await findUser({_id:req.body.userId})
+      if(user?.followers.includes(req.body.userId)){
+        await UpdateUser({_id:req.params.id},{$pull:{followers:req.body.userId}})
+        await UpdateUser({_id:req.body.userId},{$pull:{following:req.params.id}})
+        res.send('user has been unfollowed')
+      }else{
+        res.status(403).json('you havent followed this user')
+      }    
+    }catch(err){
+      res.status(500).json(err)
+    }
+
+  }else{
+    res.status(403).json('you cant unfollow yourself')
+  }
+  
 }
