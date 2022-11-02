@@ -1,5 +1,5 @@
 import express,{Request,Response} from 'express'
-import { updateUserHandler } from '../controllers/users.controller'
+import { deleteUserHandler, updateUserHandler } from '../controllers/users.controller'
 import UserModel from '../models/user.model'
 
 const router=express.Router()
@@ -10,6 +10,8 @@ const router=express.Router()
 router.put('/:id',updateUserHandler)
 /* ------------------------------- delete user ------------------------------ */
 
+
+router.delete('/:id',deleteUserHandler)
 /* ------------------------------- get a user ------------------------------- */
 
 /* ------------------------------ follow a user ----------------------------- */
