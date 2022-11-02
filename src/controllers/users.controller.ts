@@ -95,6 +95,8 @@ export async function followHandler(req:Request,res:Response){
   }
 }
 
+/* ------------------------------ unfollow user ----------------------------- */
+
 export async function unfollowHandler(req:Request,res:Response) {
   if(req.body.userId !== req.params.id){
     try{
