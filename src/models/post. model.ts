@@ -1,10 +1,15 @@
 import mongoose from "mongoose";
 import { UserDocument } from "./user.model";
 
-export interface PostDocument extends  mongoose.Document {
+export interface postinput extends mongoose.Document{
     userId: UserDocument['_id'];
-    likes: string[];
     desc:string;
+    img?:string
+   
+}
+
+export interface PostDocument extends postinput,  mongoose.Document {
+    likes: string[];
     img:string,
     updatedAt: Date;
     createdAt: Date;

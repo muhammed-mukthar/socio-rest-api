@@ -14,11 +14,11 @@ const router=express.Router()
 
 
 /* -------------------------------- Register -------------------------------- */
-router.get('/register',validateResource(createUserSchema),createUserHandler)
+router.post('/register',validateResource(createUserSchema),createUserHandler)
 
 /* ---------------------------------- login --------------------------------- */
 
-router.get('/login',validateResource(loginUserSchema),loginUserHandler)
+router.post('/login',validateResource(loginUserSchema),loginUserHandler)
 
 
 export default router
