@@ -1,5 +1,7 @@
 import {object,string,TypeOf} from 'zod'
 
+//create user schema
+
 export const createUserSchema=object({
     body:object({
         name:string({
@@ -14,3 +16,16 @@ export const createUserSchema=object({
     })
 })
 
+
+//login
+
+export const loginUserSchema = object({
+    body: object({
+      email: string({
+        required_error: "Email is required",
+      }),
+      password: string({
+        required_error: "Password is required",
+      }),
+    }),
+  });

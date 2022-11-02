@@ -1,6 +1,6 @@
 
 import { Request, Response } from "express";
-import { createSessionSchema } from "../schema/session.schema";
+
 import {  createUser, loginUser } from "../services/auth.service";
 
 import { generateAccessToken, generateRefreshToken } from "../utils/jwt.utils";
