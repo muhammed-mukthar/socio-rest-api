@@ -1,9 +1,12 @@
 import express,{Request,Response} from 'express'
+import { fromJSON } from 'postcss';
 import { createUserHandler, loginUserHandler } from '../controllers/auth.controller';
 import validateResource from '../middleware/validateResource';
 import { createSessionSchema } from '../schema/session.schema';
 import { createUserSchema } from '../schema/users.schema';
-import { createUser } from '../services/auth.service'
+
+import {verifyAdmin,verifyTokenAndAuthorization,VerifyTokenAndReissue} from '../middleware/jwtvalidate'
+
 
 
 
@@ -16,5 +19,6 @@ router.get('/register',validateResource(createUserSchema),createUserHandler)
 /* ---------------------------------- login --------------------------------- */
 
 router.get('/login',validateResource(createSessionSchema),loginUserHandler)
+
 
 export default router

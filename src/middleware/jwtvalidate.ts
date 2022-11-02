@@ -5,7 +5,7 @@ import { reIssueAccessToken } from "../services/auth.service";
 
 
 
-const VerifyTokenAndReissue = async (
+export const VerifyTokenAndReissue = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -17,7 +17,7 @@ const VerifyTokenAndReissue = async (
   const refreshToken = get(req, "headers.x-refresh");
 
   if (!accessToken) {
-    res.status(403).json('InvalidToken')
+    res.status(403).json('you are not allowed to do it')
   }else{
     const { decoded, expired } = verifyJwt(accessToken, "accessTokenSecret");
 
@@ -41,7 +41,7 @@ const VerifyTokenAndReissue = async (
   }
 };
 
-const verifyTokenAndAuthorization = (req:Request, res:Response, next:NextFunction) => {
+export const verifyTokenAndAuthorization = (req:Request, res:Response, next:NextFunction) => {
   VerifyTokenAndReissue(req, res, () => {
     const user=res.locals.user
     if (user.id === req.params.id || user.isAdmin) {
@@ -52,7 +52,7 @@ const verifyTokenAndAuthorization = (req:Request, res:Response, next:NextFunctio
   });
 };
 
-const verifyAdmin=async (
+export const verifyAdmin=async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -69,4 +69,4 @@ VerifyTokenAndReissue(req,res,()=>{
   };
 
 
-module.exports=  {VerifyTokenAndReissue,verifyTokenAndAuthorization,verifyAdmin};
+
