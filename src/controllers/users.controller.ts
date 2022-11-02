@@ -1,5 +1,8 @@
 import { Request, Response } from "express";
-import { DeleteUser, UpdateUser } from "../services/user.service";
+import { omit } from "lodash";
+import { UserDocument } from "../models/user.model";
+
+import { DeleteUser, findUser, UpdateUser } from "../services/user.service";
 
 import createHashedPass from "../utils/hashpass";
 
@@ -28,7 +31,7 @@ export async function updateUserHandler(req: Request, res: Response) {
 /* ------------------------------- delete user ------------------------------ */
 
 export async function deleteUserHandler(req: Request, res: Response) {
-  if (req.body.userId === req.params.id ) {
+  if (req.body.userId === req.params.id || res.locals?.user?.isAdmin ) {
     console.log(req.params.id);
     try {  
        DeleteUser(req.params.id).then(()=>res.status(200).json("Account has been Deleted"))
@@ -40,4 +43,28 @@ export async function deleteUserHandler(req: Request, res: Response) {
   }else{
     res.status(301).json('you are not permitted to do that')
   }
+}
+
+
+
+/* ------------------------------- get a user ------------------------------- */
+
+
+
+export async function getUserHandler(req:Request,res:Response){
+
+    try{
+        const user=await findUser({_id:req.params.id})
+      
+        console.log(user);
+        
+       
+          res.status(200).json(omit(user,'password','updatedAt'))
+       
+     
+    }catch(err){
+         res.status(500).json(err)
+    }
+   
+
 }
