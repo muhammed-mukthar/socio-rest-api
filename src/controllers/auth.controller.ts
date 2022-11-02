@@ -27,7 +27,8 @@ let user=await loginUser(req.body)//get users details
 
         let userDetails:object={
             id:user._id,
-            email:user.email
+            email:user.email,
+            isAdmin:user.isAdmin
         }
         const accessToken=generateAccessToken(userDetails)
         const refreshToken=generateRefreshToken(userDetails)
