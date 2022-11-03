@@ -1,9 +1,12 @@
-import { Request, Response } from "express";
+import e, { Request, Response } from "express";
 import PostModel from "../models/post. model";
 
-import { createPost, DeletePost, findPost, UpdatePost } from "../services/post.service";
+import { createPost, DeletePost, findallPost, findPost, UpdatePost } from "../services/post.service";
 import mongoose, { ObjectId } from "mongoose";
 import { strict } from "assert";
+import { findUser } from "../services/user.service";
+import { string } from "zod";
+import { rmSync } from "fs";
 const objectid=mongoose.Types.ObjectId
 
 /* ------------------------------- create post ------------------------------ */
@@ -26,7 +29,7 @@ export async function createPostHandler(req: Request, res: Response) {
 export async function updatePostHandler(req: Request, res: Response) {
   try {
     const post = await findPost({ _id: req.params.id });
-    console.log(post?.userId,req.params.id,req.body.userId);
+    
     
       if (post && post.userId == req.body.userId) {
         const updatedPost = await UpdatePost(
@@ -101,3 +104,25 @@ export async function deletePostHandler(req: Request, res: Response) {
       res.status(500).json(err)
     }
   }
+
+
+  //get timeline post
+
+  export async function timelinePostHandler(req: Request, res: Response) {
+    try{
+      let user:mongoose.Types.ObjectId
+      user=new objectid(req.body.userId) 
+    const currentUser = await findUser({_id:user});
+    if(!currentUser ||currentUser ==null) return res.json('user not found')
+    const userPosts = await findallPost({userId:currentUser._id})
+    if(!userPosts) return  res.json('you have not posted')
+    const friendPosts = await Promise.all(
+      currentUser.following.map((friendId) => {
+        return  findPost({userId:friendId});
+      })
+    )
+    res.json(friendPosts)
+  } catch (err) {
+    res.status(500).json(err);
+  }
+}

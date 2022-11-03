@@ -12,7 +12,14 @@ export async function createPost(input: postinput) {
 }
 
 export async function findPost(query: FilterQuery<PostDocument>) {
-  return PostModel.findOne(query).lean();
+  const post=await PostModel.findOne(query).lean();
+  if(post) return post
+  return false
+}
+export async function findallPost(query: FilterQuery<PostDocument>) {
+  const post=await PostModel.find(query);
+  if(post) return post
+  return false
 }
 
 export async function UpdatePost(

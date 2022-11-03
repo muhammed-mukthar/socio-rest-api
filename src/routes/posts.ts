@@ -4,6 +4,7 @@ import {
   deletePostHandler,
   getsinglePostHandler,
   likeDislikeHandler,
+  timelinePostHandler,
   updatePostHandler,
 } from "../controllers/posts.controller";
 import validateResource from "../middleware/validateResource";
@@ -23,5 +24,6 @@ router
 router.put("/:id/like",likeDislikeHandler);
 
 //get timeline posts
+router.get('/timeline/all',timelinePostHandler)
 
 export default router;
