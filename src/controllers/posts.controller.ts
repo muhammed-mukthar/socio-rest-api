@@ -89,3 +89,15 @@ export async function deletePostHandler(req: Request, res: Response) {
       res.status(500).json(err)
     } 
   }
+
+
+  //get post
+
+  export async function getsinglePostHandler(req: Request, res: Response) {
+    try{
+      const post = await findPost({ _id: req.params.id })
+      res.status(200).json(post)
+    }catch(err){
+      res.status(500).json(err)
+    }
+  }
