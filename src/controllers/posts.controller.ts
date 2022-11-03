@@ -65,3 +65,27 @@ export async function deletePostHandler(req: Request, res: Response) {
         res.json(err)
     }
   }
+
+
+
+  //like post
+
+  export async function likeDislikeHandler(req: Request, res: Response) {
+    try{
+      const post = await findPost({ _id: req.params.id })
+      if(!post) return res.status(404).json('post not found')
+      if(!post.likes.includes(req.body.userId)){
+      await UpdatePost(
+          { _id: req.params.id },
+          { $push: {likes:req.body.userId}})
+          res.json("The post has been liked")
+      }else{
+         await UpdatePost(
+          { _id: req.params.id },
+          { $pull: {likes:req.body.userId}})
+          res.json("The post has been disliked")
+      }
+    }catch(err){
+      res.status(500).json(err)
+    } 
+  }
