@@ -1,5 +1,5 @@
 import express,{Request,Response} from 'express'
-import { createPostHandler, updatePostHandler } from '../controllers/posts.controller'
+import { createPostHandler, deletePostHandler, updatePostHandler } from '../controllers/posts.controller'
 import validateResource from '../middleware/validateResource'
 import { createPostSchema } from '../schema/post.schema'
 
@@ -13,6 +13,7 @@ router.post('/',validateResource(createPostSchema),createPostHandler)
 router.route('/:id')
 .put(updatePostHandler)
 //delete a post
+.delete(deletePostHandler)
 //like a post
 //get a post
 //get timeline posts

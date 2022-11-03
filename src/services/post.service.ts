@@ -1,4 +1,4 @@
-import { FilterQuery, UpdateQuery } from "mongoose";
+import { FilterQuery, ObjectId, UpdateQuery } from "mongoose";
 import PostModel, { PostDocument, postinput } from "../models/post. model";
 
 export async function createPost(input:postinput) {
@@ -25,6 +25,20 @@ export async function findPost(query: FilterQuery<PostDocument>) {
       
   if(updatedPost)    return updatedPost;
   return false
+    } catch (err) {
+      return err;
+    }
+  }
+
+
+  export async function DeletePost(postId:any ) {
+    try {
+     await PostModel.deleteOne({_id:postId}).then(()=>{
+      return true
+     }).catch((err)=>{
+      return err;
+     })
+      
     } catch (err) {
       return err;
     }
