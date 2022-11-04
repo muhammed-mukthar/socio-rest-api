@@ -8,6 +8,6 @@ export default{
     saltlength: 10,
     accessTokenSecret:process.env.ACCESS_TOKEN_SECRET,
     refreshTokenSecret:process.env.REFRESH_TOKEN_SECRET,
-    accessTokenTtl:'20s',
+    accessTokenTtl:'1m',
     refreshTokenTtl:'1w'
 }

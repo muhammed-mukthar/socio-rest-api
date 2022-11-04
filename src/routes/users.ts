@@ -1,5 +1,6 @@
 import express,{Request,Response} from 'express'
 import { deleteUserHandler, followHandler, getUserHandler, unfollowHandler, updateUserHandler } from '../controllers/users.controller'
+import { verifyTokenAndAuthorization } from '../middleware/jwtvalidate'
 import UserModel from '../models/user.model'
 
 const router=express.Router()
@@ -10,7 +11,7 @@ const router=express.Router()
 router.route('/:id')
 .put(updateUserHandler)//update user
 .delete(deleteUserHandler)//delete user
-.get(getUserHandler)//get user
+.get(verifyTokenAndAuthorization,getUserHandler)//get user
 /* ------------------------------ follow a user ----------------------------- */
 router.put('/:id/follow',followHandler)
 /* ----------------------------- unfollow a user ---------------------------- */

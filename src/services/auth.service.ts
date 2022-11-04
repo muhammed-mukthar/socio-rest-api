@@ -39,19 +39,19 @@ export async function loginUser({
   }
 }
 
-const refreshTokenSecret=config.get<string >('refreshTokenSecret')
-
 export async function reIssueAccessToken({
   refreshToken,
 }: {
   refreshToken: string;
 }) {
   const { decoded } = verifyJwt(refreshToken, 'refreshTokenSecret');
+console.log(decoded,'decoded');
 
   if (!decoded ) return false;
+console.log('I am here');
 
 //@ts-ignore
-  const user = await findUser({ _id: decoded._id });
+  const user = await findUser({ _id: decoded.id });
 
   if (!user) return false;
 

@@ -36,7 +36,7 @@ export async function updatePostHandler(req: Request, res: Response) {
           { _id: req.params.id },
           { $set: req.body }
         );
-        res.status(200).json(updatedPost);
+        res.status(200).json('post has been updated');
       } else {
         res.status(403).json("you can only update yours ");
       }

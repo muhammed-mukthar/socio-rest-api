@@ -9,7 +9,8 @@ import createHashedPass from "../utils/hashpass";
 
 /* ------------------------------- update user ------------------------------ */
 export async function updateUserHandler(req: Request, res: Response) {
-  if (req.body.userId === req.params.id || res.locals.user.id) {
+  // if (req.body.userId === req.params.id || res.locals.user.id) {
+    if (req.body.userId === req.params.id ) {
     if (req.body.password) {
       try {
         req.body.password = await createHashedPass(req.body.password);
@@ -18,7 +19,7 @@ export async function updateUserHandler(req: Request, res: Response) {
       }
     }
     try {
-      const updatedUser = await UpdateUser(
+      await UpdateUser(
         { _id: req.params.id },
         { $set: req.body }
       );
@@ -26,6 +27,8 @@ export async function updateUserHandler(req: Request, res: Response) {
     } catch (error) {
       return res.status(403).json("you can only update your account");
     }
+  }else{
+    res.status(403).json('you can only update your account')
   }
 }
 

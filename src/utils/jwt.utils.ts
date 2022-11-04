@@ -18,21 +18,34 @@ export function generateAccessToken(user:object)  {
     });
   };
 
-  export function verifyJwt(
+  export  function verifyJwt(
     token: string,
     keyName: "accessTokenSecret" | "refreshTokenSecret"
   ) {
-    const publicKey = Buffer.from(config.get<string>(keyName));
+    console.log('hallo');
+    
+    const publicKey = config.get<string>(keyName);
+  console.log(publicKey,'publickey');
   
     try {
       const decoded = jwt.verify(token, publicKey);
-      console.log('decoded',decoded);
+      console.log(decoded,'jfskhfsksfalhklfsa');
       
-      return {
+      if(decoded){
+         return {
         valid: true,
         expired: false,
         decoded,
       };
+      }else{
+        return {
+          valid: false,
+          expired:  "invalid accessToken",
+          decoded: null,
+        };
+      }
+      
+     
     } catch (e: any) {
       console.error(e);
       return {
