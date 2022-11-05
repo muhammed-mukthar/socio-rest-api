@@ -10,12 +10,14 @@ export const VerifyTokenAndReissue = async (
   res: Response,
   next: NextFunction
 ) => {
+  console.log('i am here');
+  
   const accessToken = get(req, "headers.authorization", "").replace(
     /^Bearer\s/,
     ""
   );
   const refreshToken = get(req, "headers.x-refresh");
-console.log(accessToken);
+
 
   if (!accessToken) {
     res.status(403).json('you are not allowed to do it')

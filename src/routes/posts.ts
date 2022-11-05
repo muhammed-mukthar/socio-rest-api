@@ -7,6 +7,7 @@ import {
   timelinePostHandler,
   updatePostHandler,
 } from "../controllers/posts.controller";
+import { VerifyTokenAndReissue } from "../middleware/jwtvalidate";
 import validateResource from "../middleware/validateResource";
 import { createPostSchema } from "../schema/post.schema";
 
@@ -16,14 +17,14 @@ router.post("/", validateResource(createPostSchema), createPostHandler); //creat
 
 router
   .route("/:id")
-  .get(getsinglePostHandler)//get a post
-  .put(updatePostHandler) //update a post
-  .delete(deletePostHandler); //delete a post
+  .get(VerifyTokenAndReissue,getsinglePostHandler)//get a post
+  .put(VerifyTokenAndReissue,updatePostHandler) //update a post
+  .delete(VerifyTokenAndReissue,deletePostHandler); //delete a post
  
 //like dislike a post
-router.put("/:id/like",likeDislikeHandler);
+router.put("/:id/like",VerifyTokenAndReissue,likeDislikeHandler);
 
 //get timeline posts
-router.get('/timeline/all',timelinePostHandler)
+router.get('/timeline/all',VerifyTokenAndReissue,timelinePostHandler)
 
 export default router;

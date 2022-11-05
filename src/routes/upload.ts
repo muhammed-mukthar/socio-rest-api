@@ -7,6 +7,7 @@ import config from "config";
 import { deleteImageStack, uploadFile } from "../utils/s3";
 import path from 'path'
 import { generateKey } from "crypto";
+import { VerifyTokenAndReissue } from "../middleware/jwtvalidate";
 const router=express.Router()
 
 const AWS_ACESS=config.get<string>("AWS_ACESS")
@@ -36,7 +37,7 @@ const imageUpload = multer({
     storage: imageStorage,
 }) 
 
-router.post('/images',imageUpload.single('image'),async(req:Request,res:Response)=>{
+router.post('/images',VerifyTokenAndReissue,imageUpload.single('image'),async(req:Request,res:Response)=>{
     try{
  const file=req.file
    
@@ -59,7 +60,7 @@ router.post('/images',imageUpload.single('image'),async(req:Request,res:Response
         // Uploading files to the bucket
       s3.upload(params,    function (err: any, data: any) {
           if (err) {
-              res.json(500).json(err)
+              res.status(500).json(err)
           } if (data) {
               console.log(data.Location, 'hehe', data);
               
@@ -79,7 +80,7 @@ router.post('/images',imageUpload.single('image'),async(req:Request,res:Response
 
 
 
-router.post('/delete-images', async (req, res) => {
+router.post('/delete-images',VerifyTokenAndReissue, async (req, res) => {
     try {
       const { imageRefs } = req.body;
       // Calling our helper function

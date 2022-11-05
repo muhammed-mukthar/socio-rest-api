@@ -5,7 +5,7 @@ import validateResource from '../middleware/validateResource';
 
 import { createUserSchema, loginUserSchema } from '../schema/users.schema';
 
-import {verifyAdmin,verifyTokenAndAuthorization,VerifyTokenAndReissue} from '../middleware/jwtvalidate'
+import {verifyAdmin,VerifyTokenAndReissue} from '../middleware/jwtvalidate'
 
 
 

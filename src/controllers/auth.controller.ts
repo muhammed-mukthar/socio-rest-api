@@ -22,7 +22,7 @@ export async function createUserHandler(req:Request,res:Response) {
 export async function loginUserHandler(req:Request,res:Response) {
 let user=await loginUser(req.body)//get users details
     if(!user){
-        res.status(404).json('user not found')
+        res.status(404).json({message:'user not found'})
     }else{
 
         let userDetails:object={
