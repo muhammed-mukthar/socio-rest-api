@@ -5,6 +5,7 @@ import connect  from './utils/connect';
 import postRoute from './routes/posts'
 import userRoute from './routes/users'
 import authRoute from './routes/auth'
+import uploadRoute from './routes/upload'
 import helmet from 'helmet'
 import morgan  from  'morgan'
 import cors from 'cors'
@@ -20,6 +21,8 @@ app.use(cors())
 app.use('/api/posts',postRoute)
 app.use('/api/users',userRoute)
 app.use('/api/auth',authRoute)
+app.use('/api/uploads',uploadRoute)
+
 app.listen(port,async()=>{
     console.log('app is running on port 5000');
     connect()
