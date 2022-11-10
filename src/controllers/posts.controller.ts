@@ -110,8 +110,6 @@ export async function deletePostHandler(req: Request, res: Response) {
 
   export async function timelinePostHandler(req: Request, res: Response) {
     try{
-     
-      
       let user:mongoose.Types.ObjectId
       //@ts-ignore
       user=new objectid(req.user.id) 
@@ -124,7 +122,8 @@ export async function deletePostHandler(req: Request, res: Response) {
         return  findPost({userId:friendId});
       })
     )
-    res.json(friendPosts)
+    //@ts-ignore
+    res.json(userPosts.concat(...friendPosts))
   } catch (err) {
     res.status(500).json(err);
   }

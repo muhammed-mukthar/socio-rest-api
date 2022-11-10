@@ -36,15 +36,19 @@ let user=await loginUser(req.body)//get users details
     if(!user){
         res.status(404).json({message:'user not found'})
     }else{
-
         let userDetails:object={
             id:user._id,
             email:user.email,
-            isAdmin:user.isAdmin
+            isAdmin:user.isAdmin,
+            profilePic:user.profilePic,
+            followers:user.followers,
+            following:user.following,
+            name:user.name
+
         }
         const accessToken=generateAccessToken(userDetails)
         const refreshToken=generateRefreshToken(userDetails)
-        res.json({accessToken,refreshToken})
+        res.json({accessToken,refreshToken,...userDetails})
     }
 }
     
