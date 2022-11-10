@@ -3,16 +3,28 @@ import { Request, Response } from "express";
 
 import {  createUser, loginUser } from "../services/auth.service";
 
+import {  findUser } from "../services/user.service";
 import { generateAccessToken, generateRefreshToken } from "../utils/jwt.utils";
 
 
 /* ------------------------------- create user ------------------------------ */
 export async function createUserHandler(req:Request,res:Response) {
     try{
+        let userexist=await findUser({email:req.body.email})
+        console.log(userexist);
+        
+        if(userexist){
+            res.json({err:"user already exist"})
+
+        }else{
    const user=await createUser(req.body);
+  
         res.json(user)
+        }
+    
+
     }catch(err:any){
-        return res.status(409).json(err.message);
+         res.status(409).json(err.message);
     }
      
        }

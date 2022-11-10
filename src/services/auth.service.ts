@@ -48,7 +48,6 @@ export async function reIssueAccessToken({
 console.log(decoded,'decoded');
 
   if (!decoded ) return false;
-console.log('I am here');
 
 //@ts-ignore
   const user = await findUser({ _id: decoded.id });

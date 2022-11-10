@@ -18,8 +18,14 @@ export async function findPost(query: FilterQuery<PostDocument>) {
 }
 export async function findallPost(query: FilterQuery<PostDocument>) {
   const post=await PostModel.find(query);
-  if(post) return post
-  return false
+  console.log(post);
+  
+  if(post){
+    return post
+  }else{
+     return false
+  } 
+ 
 }
 
 export async function UpdatePost(
