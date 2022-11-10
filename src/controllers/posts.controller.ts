@@ -110,8 +110,11 @@ export async function deletePostHandler(req: Request, res: Response) {
 
   export async function timelinePostHandler(req: Request, res: Response) {
     try{
+     
+      
       let user:mongoose.Types.ObjectId
-      user=new objectid(req.body.userId) 
+      //@ts-ignore
+      user=new objectid(req.user.id) 
     const currentUser = await findUser({_id:user});
     if(!currentUser ||currentUser ==null) return res.json('user not found')
     const userPosts = await findallPost({userId:currentUser._id})

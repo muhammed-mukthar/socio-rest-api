@@ -26,7 +26,8 @@ export const VerifyTokenAndReissue = async (
 console.log(decoded,expired,'decodedfsdfsdfsdfsd');
 
   if (decoded) {
-    res.locals.user = decoded;
+    //@ts-ignore
+    req.user = decoded;
     return next();
   }else if (expired && refreshToken) {
     const newAccessToken = await reIssueAccessToken({ refreshToken });
@@ -35,8 +36,8 @@ console.log(newAccessToken);
     if (newAccessToken) {
       res.setHeader("x-access-token", newAccessToken);
       const result = verifyJwt(newAccessToken, "accessTokenSecret");
-
-    res.locals.user = result.decoded;
+    //@ts-ignore
+    req.user = result.decoded;
     return next();
     }else{
       res.json('cannot send new access token')
@@ -51,7 +52,8 @@ console.log(newAccessToken);
 
 export const verifyTokenAndAuthorization = (req:Request, res:Response, next:NextFunction) => {
   VerifyTokenAndReissue(req, res, () => {
-    const user=res.locals.user
+    //@ts-ignore
+    const user=req.user
     console.log(user,'user here');
     
     if (user.id === req.params.id || user.isAdmin) {
@@ -68,7 +70,8 @@ export const verifyAdmin=async (
   next: NextFunction
 )=>{
 VerifyTokenAndReissue(req,res,()=>{
-  const user=res.locals.user
+  //@ts-ignore
+  const user=req.user
   if (user.isAdmin) {
     next();
   } else {

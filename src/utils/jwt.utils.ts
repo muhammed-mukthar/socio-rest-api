@@ -22,15 +22,11 @@ export function generateAccessToken(user:object)  {
     token: string,
     keyName: "accessTokenSecret" | "refreshTokenSecret"
   ) {
-    console.log('hallo');
-    
     const publicKey = config.get<string>(keyName);
   console.log(publicKey,'publickey');
-  
     try {
       const decoded = jwt.verify(token, publicKey);
       console.log(decoded,'jfskhfsksfalhklfsa');
-      
       if(decoded){
          return {
         valid: true,
