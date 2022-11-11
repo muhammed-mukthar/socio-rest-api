@@ -28,6 +28,10 @@ const PostSchema = new mongoose.Schema(
         type:String,
         default:''
      },
+     key:{
+      type:String,
+      default:''
+   },
      likes:{
         type:Array,
         default:[]

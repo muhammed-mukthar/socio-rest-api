@@ -13,7 +13,7 @@ const objectid=mongoose.Types.ObjectId
 
 export async function createPostHandler(req: Request, res: Response) {
   try {
-    console.log(req.body,'post body');
+    console.log(req.body,'post is here guys body');
     
     //@ts-ignore
     const userId=req.user.id

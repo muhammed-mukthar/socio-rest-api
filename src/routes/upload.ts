@@ -40,6 +40,8 @@ const imageUpload = multer({
 router.post('/images',VerifyTokenAndReissue,imageUpload.single('image'),async(req:Request,res:Response)=>{
     try{
  const file=req.file
+ console.log(req.file,req.body,'fsdsfdd');
+ 
    
   
 //  const result= await uploadFile(file)
@@ -74,6 +76,8 @@ router.post('/images',VerifyTokenAndReissue,imageUpload.single('image'),async(re
     };
   uploadFile(file)
     }catch(err){
+      console.log(err,"yyhhghgjghjghjhjhgjhg");
+      
         res.status(500).json(err)
     } 
 })
