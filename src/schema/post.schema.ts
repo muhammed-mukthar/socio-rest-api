@@ -5,9 +5,6 @@ export const createPostSchema = object({
     desc: string({
       required_error: "description is required",
     }),
-    userId: string({
-      required_error: "userId is required",
-    }),
   }),
 });
 

@@ -14,7 +14,7 @@ import { createPostSchema } from "../schema/post.schema";
 
 const router = express.Router();
 
-router.post("/", validateResource(createPostSchema), createPostHandler); //create a post
+router.post("/", validateResource(createPostSchema),VerifyTokenAndReissue, createPostHandler); //create a post
 
 router
   .route("/:id")

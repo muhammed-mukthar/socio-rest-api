@@ -13,8 +13,17 @@ const objectid=mongoose.Types.ObjectId
 
 export async function createPostHandler(req: Request, res: Response) {
   try {
+    console.log(req.body,'post body');
     
-    const newPost = await createPost(req.body);
+    //@ts-ignore
+    const userId=req.user.id
+    const postbody={
+      ...req.body,
+      userId:userId
+    }
+    console.log(postbody,'postbody');
+    
+    const newPost = await createPost(postbody);
     if (newPost) {
       res.json(newPost);
     } else {
