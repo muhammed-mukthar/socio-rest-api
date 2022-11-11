@@ -6,6 +6,7 @@ import {
   likeDislikeHandler,
   timelinePostHandler,
   updatePostHandler,
+  userPostHandler,
 } from "../controllers/posts.controller";
 import { VerifyTokenAndReissue } from "../middleware/jwtvalidate";
 import validateResource from "../middleware/validateResource";
@@ -27,4 +28,6 @@ router.put("/:id/like",VerifyTokenAndReissue,likeDislikeHandler);
 //get timeline posts
 router.get('/timeline/all',VerifyTokenAndReissue,timelinePostHandler)
 
+//user's post 
+router.get("/profile/:id", VerifyTokenAndReissue,userPostHandler);
 export default router;

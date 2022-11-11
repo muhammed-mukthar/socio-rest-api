@@ -13,7 +13,7 @@ import cors from 'cors'
 dotenv.config()
 const app=express()
 const port = config.get<number>("port");
-console.log(port);
+
 
 
   app.use(cookieParser());

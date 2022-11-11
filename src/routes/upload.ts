@@ -41,7 +41,7 @@ router.post('/images',VerifyTokenAndReissue,imageUpload.single('image'),async(re
     try{
  const file=req.file
    
-    console.log(file);
+  
 //  const result= await uploadFile(file)
 //  console.log(result,'result here');
 //     res.json(result)
@@ -62,11 +62,11 @@ router.post('/images',VerifyTokenAndReissue,imageUpload.single('image'),async(re
           if (err) {
               res.status(500).json(err)
           } if (data) {
-              console.log(data.Location, 'hehe', data);
+            
               
               res.json({location:data.Location,key:data.key})
           } else {
-              console.log('nothing here');
+             
               res.status(404).json({ message: "response not found from s3" }) 
           }
     
@@ -88,7 +88,7 @@ router.post('/delete-images',VerifyTokenAndReissue, async (req, res) => {
    
       res.status(201).json('image deleted');
     } catch(e) {
-      console.log(e);
+     
       res.status(500).json('error happened cannot delete');
     }
   });

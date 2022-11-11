@@ -45,10 +45,10 @@ export const uploadFile = async(file:any):Promise<any> => {
       if (err) {
           return { message: "error happened here" };
       } if (data) {
-          console.log(data.Location, 'hehe', data);
+      
           return data.Location
       } else {
-          console.log('nothing here');
+        
           return { message: "response not found from s3" };
       }
 

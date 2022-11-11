@@ -23,10 +23,10 @@ export function generateAccessToken(user:object)  {
     keyName: "accessTokenSecret" | "refreshTokenSecret"
   ) {
     const publicKey = config.get<string>(keyName);
-  console.log(publicKey,'publickey');
+ 
     try {
       const decoded = jwt.verify(token, publicKey);
-      console.log(decoded,'jfskhfsksfalhklfsa');
+      
       if(decoded){
          return {
         valid: true,

@@ -13,6 +13,7 @@ const objectid=mongoose.Types.ObjectId
 
 export async function createPostHandler(req: Request, res: Response) {
   try {
+    
     const newPost = await createPost(req.body);
     if (newPost) {
       res.json(newPost);
@@ -53,9 +54,9 @@ export async function deletePostHandler(req: Request, res: Response) {
     try {
         
         const post = await findPost({ _id: req.params.id })
-        console.log(post);
+        
         if(!post) return res.status(301).json('invalid post post')
-        console.log(post?.userId,req.params.id,req.body.userId);
+    
         if ( post.userId == req.body.userId) {
               DeletePost(
               req.params.id
@@ -105,6 +106,18 @@ export async function deletePostHandler(req: Request, res: Response) {
     }
   }
 
+  export async function userPostHandler(req: Request, res: Response) {
+    try {
+      // const user = await User.findOne({ username: req.params.username });
+     
+      
+      const posts = await PostModel.find({ userId: req.params.id });
+     
+      res.status(200).json(posts);
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  }
 
   //get timeline post
 
@@ -122,6 +135,8 @@ export async function deletePostHandler(req: Request, res: Response) {
         return  findPost({userId:friendId});
       })
     )
+    
+    
     //@ts-ignore
     res.json(userPosts.concat(...friendPosts))
   } catch (err) {

@@ -12,7 +12,7 @@ export async function createUser(input: UserInput) {
 
     return omit(user.toJSON(), "password");
   } catch (err: any) {
-    console.log("err", err);
+    
 
     return err;
   }
@@ -45,7 +45,7 @@ export async function reIssueAccessToken({
   refreshToken: string;
 }) {
   const { decoded } = verifyJwt(refreshToken, 'refreshTokenSecret');
-console.log(decoded,'decoded');
+
 
   if (!decoded ) return false;
 

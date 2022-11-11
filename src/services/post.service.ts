@@ -18,7 +18,7 @@ export async function findPost(query: FilterQuery<PostDocument>) {
 }
 export async function findallPost(query: FilterQuery<PostDocument>) {
   const post=await PostModel.find(query);
-  console.log(post);
+ 
   
   if(post){
     return post
@@ -33,7 +33,7 @@ export async function UpdatePost(
   updatequery: UpdateQuery<PostDocument>
 ) {
   try {
-    console.log(filterquery, updatequery);
+    
 
       PostModel.findByIdAndUpdate(
       filterquery,

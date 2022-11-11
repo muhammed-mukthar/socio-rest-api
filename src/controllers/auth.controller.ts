@@ -11,7 +11,7 @@ import { generateAccessToken, generateRefreshToken } from "../utils/jwt.utils";
 export async function createUserHandler(req:Request,res:Response) {
     try{
         let userexist=await findUser({email:req.body.email})
-        console.log(userexist);
+        
         
         if(userexist){
             res.json({err:"user already exist"})
