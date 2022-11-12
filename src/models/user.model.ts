@@ -33,10 +33,9 @@ const UserSchema = new mongoose.Schema(
     email: { type: String, required: true, unique: true },
     name: { type: String, required: true },
     password: { type: String, required: true },
-    coverPic: { type: String, default: "" },
-    profilePic: { type: String, default: "" },
-    profilekey: { type: String, default: "" },
-    coverkey: { type: String, default: "" },
+    coverPic: { type: String, default: "https://images.fastcompany.net/image/upload/w_596,c_limit,q_auto:best,f_auto/wp-cms/uploads/2021/03/LinkedIn-Default-Background-2020-.jpg" },
+    profilekey: { type: String, default: "https://vectorified.com/images/default-profile-picture-icon-3.png" },
+    coverkey: { type: String,  },
 
     followers: {
       type: Array,
@@ -53,17 +52,17 @@ const UserSchema = new mongoose.Schema(
     desc:{
         type:String,
         max:50,
-        default:""
+      
       },
       city:{
         type:String,
         max:50,
-        default:"",
+    
       },
       relationship:{
         type:Number,
         enum:[1,2,3],
-        default:""
+       
       }
     ,
   },

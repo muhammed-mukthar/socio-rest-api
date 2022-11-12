@@ -26,16 +26,20 @@ const PostSchema = new mongoose.Schema(
      },
      img:{
         type:String,
-        default:''
+       
      },
      key:{
       type:String,
-      default:''
+         
    },
      likes:{
         type:Array,
-        default:[]
-     }
+       
+     },
+     comments:{
+      type:Array,
+  
+   }
     },
     {
       timestamps: true,

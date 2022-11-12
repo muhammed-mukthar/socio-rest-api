@@ -86,22 +86,28 @@ export async function deletePostHandler(req: Request, res: Response) {
 
   export async function likeDislikeHandler(req: Request, res: Response) {
     try{
+      //@ts-ignore
+      console.log(req.user.id,'hallo i am here');
+      
       const post = await findPost({ _id: req.params.id }) 
       console.log(post,'fsfsd');
       
       if(!post) return res.status(404).json('post not found')
-      if(!req.body.userId) return res.status(404).json('user not found')
-      if(!post.likes.includes(req.body.userId)){
+      
+      //@ts-ignore
+      if(!post.likes.includes(req.user.id)){
       await UpdatePost(
           { _id: req.params.id },
-          { $push: {likes:req.body.userId}})
-          console.log(post.likes.includes(req.body.userId),'sfsff');
+           //@ts-ignore
+          { $push: {likes:req.user.id}})
+          // console.log(post.likes.includes(req.body.userId),'sfsff');
           
           res.json("The post has been liked")
       }else{
          await UpdatePost(
           { _id: req.params.id },
-          { $pull: {likes:req.body.userId}})
+          //@ts-ignore
+          { $pull: {likes:req.user.id}})
           res.json("The post has been disliked")
       }
     }catch(err){
