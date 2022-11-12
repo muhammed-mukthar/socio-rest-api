@@ -19,7 +19,8 @@ export interface UserDocument extends UserInput, mongoose.Document {
   followers: string[];
   following: string[];
   isAdmin: boolean;
-  key:string;
+  profilekey:string;
+  coverkey:string;
   desc:string;
   city:string,
   relationship:number;
@@ -34,7 +35,8 @@ const UserSchema = new mongoose.Schema(
     password: { type: String, required: true },
     coverPic: { type: String, default: "" },
     profilePic: { type: String, default: "" },
-    key: { type: String, default: "" },
+    profilekey: { type: String, default: "" },
+    coverkey: { type: String, default: "" },
 
     followers: {
       type: Array,

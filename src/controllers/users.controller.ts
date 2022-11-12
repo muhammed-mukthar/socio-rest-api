@@ -9,8 +9,11 @@ import createHashedPass from "../utils/hashpass";
 
 /* ------------------------------- update user ------------------------------ */
 export async function updateUserHandler(req: Request, res: Response) {
-  // if (req.body.userId === req.params.id || res.locals.user.id) {
-    if (req.body.userId === req.params.id ) {
+  console.log(req.body,'bofy here');
+  
+  //@ts-ignore
+  if (req.user.id === req.params.id) {
+    // if (req.body.userId === req.params.id ) {
     if (req.body.password) {
       try {
         req.body.password = await createHashedPass(req.body.password);
@@ -35,7 +38,7 @@ export async function updateUserHandler(req: Request, res: Response) {
 /* ------------------------------- delete user ------------------------------ */
 
 export async function deleteUserHandler(req: Request, res: Response) {
-  //@ts-ignore
+  // @ts-ignore
   if (req.body.userId === req.params.id || req.user.isAdmin ) {
   
     try {  

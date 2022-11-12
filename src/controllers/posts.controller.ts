@@ -38,6 +38,7 @@ export async function createPostHandler(req: Request, res: Response) {
 
 export async function updatePostHandler(req: Request, res: Response) {
   try {
+    
     const post = await findPost({ _id: req.params.id });
     
     
@@ -85,12 +86,17 @@ export async function deletePostHandler(req: Request, res: Response) {
 
   export async function likeDislikeHandler(req: Request, res: Response) {
     try{
-      const post = await findPost({ _id: req.params.id })
+      const post = await findPost({ _id: req.params.id }) 
+      console.log(post,'fsfsd');
+      
       if(!post) return res.status(404).json('post not found')
+      if(!req.body.userId) return res.status(404).json('user not found')
       if(!post.likes.includes(req.body.userId)){
       await UpdatePost(
           { _id: req.params.id },
           { $push: {likes:req.body.userId}})
+          console.log(post.likes.includes(req.body.userId),'sfsff');
+          
           res.json("The post has been liked")
       }else{
          await UpdatePost(
@@ -120,7 +126,7 @@ export async function deletePostHandler(req: Request, res: Response) {
       // const user = await User.findOne({ username: req.params.username });
      
       
-      const posts = await PostModel.find({ userId: req.params.id });
+      const posts = await findallPost({ userId: req.params.id });
      
       res.status(200).json(posts);
     } catch (err) {
@@ -141,7 +147,7 @@ export async function deletePostHandler(req: Request, res: Response) {
     if(!userPosts) return  res.json('you have not posted')
     const friendPosts = await Promise.all(
       currentUser.following.map((friendId) => {
-        return  findPost({userId:friendId});
+        return  findallPost({userId:friendId});
       })
     )
     

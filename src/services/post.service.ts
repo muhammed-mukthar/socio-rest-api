@@ -17,7 +17,7 @@ export async function findPost(query: FilterQuery<PostDocument>) {
   return false
 }
 export async function findallPost(query: FilterQuery<PostDocument>) {
-  const post=await PostModel.find(query);
+  const post=await PostModel.find(query).sort({createdAt:-1})
  
   
   if(post){

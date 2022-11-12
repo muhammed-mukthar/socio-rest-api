@@ -43,7 +43,7 @@ export function generateAccessToken(user:object)  {
       
      
     } catch (e: any) {
-      console.error(e);
+      
       return {
         valid: false,
         expired: e.message === "jwt expired",
