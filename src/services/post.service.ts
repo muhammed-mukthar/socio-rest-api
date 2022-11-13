@@ -1,4 +1,4 @@
-import { FilterQuery, ObjectId, UpdateQuery } from "mongoose";
+import mongoose, { FilterQuery, ObjectId, UpdateQuery } from "mongoose";
 import PostModel, { PostDocument, postinput } from "../models/post. model";
 
 export async function createPost(input: postinput) {
@@ -35,7 +35,7 @@ export async function UpdatePost(
   try {
     
 
-      PostModel.findByIdAndUpdate(
+      PostModel.updateOne(
       filterquery,
       updatequery
     ).then((result) => {
@@ -49,7 +49,7 @@ export async function UpdatePost(
   }
 }
 
-export async function DeletePost(postId: any) {
+export async function DeletePost(postId: string) {
   try {
      PostModel.deleteOne({ _id: postId })
       .then(() => {
@@ -62,3 +62,5 @@ export async function DeletePost(postId: any) {
     return err;
   }
 }
+
+

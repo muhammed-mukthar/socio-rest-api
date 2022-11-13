@@ -13,7 +13,7 @@ const objectid=mongoose.Types.ObjectId
 
 export async function createPostHandler(req: Request, res: Response) {
   try {
-    console.log(req.body,'post is here guys body');
+    
     
     //@ts-ignore
     const userId=req.user.id
@@ -162,5 +162,27 @@ export async function deletePostHandler(req: Request, res: Response) {
     res.json(userPosts.concat(...friendPosts))
   } catch (err) {
     res.status(500).json(err);
+  }
+}
+
+
+export async function createcommentHandler(req: Request, res: Response) {
+  try{
+   await UpdatePost(
+      { _id: req.params.id },
+      //@ts-ignore
+      { $push: {comments:req.body}})
+      res.json('comment created successfully')
+  }catch(err){
+    res.status(500).json(err)
+  }
+  
+}
+
+export async function updatecommentHandler(req: Request, res: Response){
+  try{
+
+  }catch(err){
+    res.status(500).json(err)
   }
 }

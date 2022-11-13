@@ -10,6 +10,7 @@ export interface postinput extends mongoose.Document{
 
 export interface PostDocument extends postinput,  mongoose.Document {
     likes: string[];
+    comments:[];
     img:string,
     updatedAt: Date;
     createdAt: Date;
@@ -30,16 +31,16 @@ const PostSchema = new mongoose.Schema(
      },
      key:{
       type:String,
-         
+      
    },
      likes:{
         type:Array,
        
      },
-     comments:{
-      type:Array,
+     comments:[{type: new mongoose.Schema({
+      user: { type:mongoose.Schema.Types.ObjectId, ref: "User", },  
+      comment: { type: String}},{timestamps: true})}],
   
-   }
     },
     {
       timestamps: true,

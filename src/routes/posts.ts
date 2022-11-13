@@ -1,5 +1,6 @@
 import express, { Request, Response } from "express";
 import {
+  createcommentHandler,
   createPostHandler,
   deletePostHandler,
   getsinglePostHandler,
@@ -30,4 +31,12 @@ router.get('/timeline/all',VerifyTokenAndReissue,timelinePostHandler)
 
 //user's post 
 router.get("/profile/:id", VerifyTokenAndReissue,userPostHandler);
+
+
+//create comment
+router.post('/comment',VerifyTokenAndReissue,createcommentHandler)
+
+//edi comment
+router.post('/comment',VerifyTokenAndReissue,)
+
 export default router;
