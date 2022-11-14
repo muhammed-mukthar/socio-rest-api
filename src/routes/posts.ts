@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import {
   createcommentHandler,
   createPostHandler,
+  deletecommentHandler,
   deletePostHandler,
   getsinglePostHandler,
   likeDislikeHandler,
@@ -34,9 +35,9 @@ router.get("/profile/:id", VerifyTokenAndReissue,userPostHandler);
 
 
 //create comment
-router.post('/comment',VerifyTokenAndReissue,createcommentHandler)
+router.put('/:id/comment',VerifyTokenAndReissue,createcommentHandler)
 
-//edi comment
-router.post('/comment',VerifyTokenAndReissue,)
+//delete comment
+router.put('/:id/uncomment',VerifyTokenAndReissue,deletecommentHandler)
 
 export default router;

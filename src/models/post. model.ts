@@ -37,10 +37,26 @@ const PostSchema = new mongoose.Schema(
         type:Array,
        
      },
-     comments:[{type: new mongoose.Schema({
-      user: { type:mongoose.Schema.Types.ObjectId, ref: "User", },  
-      comment: { type: String}},{timestamps: true})}],
-  
+     comments:[
+      {
+                user:{
+                          type:mongoose.Schema.Types.ObjectId,
+                          ref: "User",
+                          required:true
+                },
+                name:{
+                          type:String,
+                          required:true
+                },
+                profile:{
+                          type:String
+                },
+                comment:{
+                          type:String,
+                          required:true
+                }
+      }
+],
     },
     {
       timestamps: true,
