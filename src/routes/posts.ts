@@ -34,9 +34,9 @@ router.get("/profile/:id", VerifyTokenAndReissue,userPostHandler);
 
 
 //create comment
-router.post('/comment',VerifyTokenAndReissue,createcommentHandler)
+router.put('/:id/comment',VerifyTokenAndReissue,createcommentHandler)
 
 //edi comment
-router.post('/comment',VerifyTokenAndReissue,)
+router.put('/:id/comment',VerifyTokenAndReissue,)
 
 export default router;

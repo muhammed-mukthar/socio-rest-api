@@ -39,7 +39,11 @@ const PostSchema = new mongoose.Schema(
      },
      comments:[{type: new mongoose.Schema({
       user: { type:mongoose.Schema.Types.ObjectId, ref: "User", },  
-      comment: { type: String}},{timestamps: true})}],
+      name:{type:String},
+      profile:{type:String},
+      comment: { type: String}},
+    {timestamps: true})}],
+    
   
     },
     {

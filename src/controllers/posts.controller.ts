@@ -168,20 +168,47 @@ export async function deletePostHandler(req: Request, res: Response) {
 
 export async function createcommentHandler(req: Request, res: Response) {
   try{
-   await UpdatePost(
+ 
+    
+
+            const comments={
+              //@ts-ignore
+                  user:req.user.id,
+                    //@ts-ignore
+                  name:req.body.name,
+                 
+                  comment:req.body.comments,
+                   //@ts-ignore
+                  profile:req.body.profile
+            }
+  const post=await findPost({_id:req.params.id})
+  if(post){
+   
+    console.log(comments,'comments');
+    
+    await UpdatePost(
       { _id: req.params.id },
       //@ts-ignore
-      { $push: {comments:req.body}})
+      { $push: {comments:comments}})
+
       res.json('comment created successfully')
+  }else{
+    res.json(401).json('post not found')
+  }
+  
   }catch(err){
     res.status(500).json(err)
   }
   
 }
 
-export async function updatecommentHandler(req: Request, res: Response){
+export async function deletecommentHandler(req: Request, res: Response){
   try{
-
+    await UpdatePost(
+      { _id: req.params.id },
+      //@ts-ignore
+      { $pull: { comments: {_id:req.query.comment}}})
+      res.json('comment deleted successfully')
   }catch(err){
     res.status(500).json(err)
   }
