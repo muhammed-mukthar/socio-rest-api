@@ -207,7 +207,7 @@ export async function deletecommentHandler(req: Request, res: Response){
     await UpdatePost(
       { _id: req.params.id },
       //@ts-ignore
-      { $pull: { comments: {_id:req.query.comment}}})
+      { $pull: { comments: {_id:req.body.commentId}}})
       res.json('comment deleted successfully')
   }catch(err){
     res.status(500).json(err)
