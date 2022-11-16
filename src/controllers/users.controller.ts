@@ -81,14 +81,18 @@ export async function getUserHandler(req:Request,res:Response){
 
 
 export async function followHandler(req:Request,res:Response){
-  if(req.body.userId !== req.params.id){
+    //@ts-ignore
+  if(req.user.id !== req.params.id){
     try{
       const user=await findUser({_id:req.params.id})
-      const currentUser=await findUser({_id:req.body.userId})
+      
       if(!user?.followers.includes(req.body.userId)){
-        await UpdateUser({_id:req.params.id},{$push:{followers:req.body.userId}})
-        await UpdateUser({_id:req.body.userId},{$push:{following:req.params.id}})
-        res.send('user has been followed')
+          //@ts-ignore
+        await UpdateUser({_id:req.params.id},{$push:{followers:req.user.id}})
+          //@ts-ignore
+        await UpdateUser({_id:req.user.id},{$push:{following:req.params.id}})
+        console.log('yay');
+        res.json('user has been followed')
       }else{
         res.status(403).json('you already follow this user')
       }    
@@ -104,16 +108,25 @@ export async function followHandler(req:Request,res:Response){
 /* ------------------------------ unfollow user ----------------------------- */
 
 export async function unfollowHandler(req:Request,res:Response) {
-  if(req.body.userId !== req.params.id){
+  //@ts-ignore
+  if(req.user.id !== req.params.id){
     try{
       const user=await findUser({_id:req.params.id})
-      const currentUser=await findUser({_id:req.body.userId})
-      if(user?.followers.includes(req.body.userId)){
-        await UpdateUser({_id:req.params.id},{$pull:{followers:req.body.userId}})
-        await UpdateUser({_id:req.body.userId},{$pull:{following:req.params.id}})
-        res.send('user has been unfollowed')
+        //@ts-ignore
+      const currentUser=await findUser({_id:req.user.id})
+        //@ts-ignore
+      if(user?.followers.includes(req.user.id)){
+          //@ts-ignore
+        await UpdateUser({_id:req.params.id},{$pull:{followers:req.user.id}})
+          //@ts-ignore
+        await UpdateUser({_id:req.user.id},{$pull:{following:req.params.id}})
+        res.json('user has been unfollowed')
+        console.log('yay');
+        
       }else{
         res.status(403).json('you havent followed this user')
+        console.log('i am here');
+        
       }    
     }catch(err){
       res.status(500).json(err)
