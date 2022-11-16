@@ -4,6 +4,8 @@ import dotenv from 'dotenv'
 import connect  from './utils/connect';
 import postRoute from './routes/posts'
 import userRoute from './routes/users'
+import conversationRoute from './routes/conversation'
+import messageRoute from './routes/message'
 import authRoute from './routes/auth'
 import uploadRoute from './routes/upload';
 import cookieParser from 'cookie-parser'
@@ -34,6 +36,8 @@ app.use(cors())
 app.use('/api/posts',postRoute)
 app.use('/api/users',userRoute)
 app.use('/api/auth',authRoute)
+app.use('/api/conversation',conversationRoute)
+app.use('/api/message',messageRoute)
 app.use('/api/uploads',uploadRoute)
 
 app.listen(port,async()=>{
