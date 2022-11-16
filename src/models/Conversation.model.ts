@@ -1,7 +1,12 @@
 import mongoose from "mongoose";
 
+
+export interface Conversationinput extends mongoose.Document{
+  members: Array<string>,
+}
+
 export interface ConversationDocument extends mongoose.Document {
-    members: String,
+    members: Array<string>,
     updatedAt: Date;
     createdAt: Date;
   }
