@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-export interface ConversationDocument extends mongoose.Document {
+export interface MessageDocument extends mongoose.Document {
     conversationId: String,
       sender:  String,
       text:  String,
@@ -8,7 +8,7 @@ export interface ConversationDocument extends mongoose.Document {
     createdAt: Date;
   }
 
-const ConversationSchema = new mongoose.Schema(
+const MessageSchema = new mongoose.Schema(
   {
     conversationId: {
       type: String,
@@ -23,5 +23,5 @@ const ConversationSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const ConversationModel = mongoose.model<ConversationDocument>("Message", ConversationSchema);
-export default ConversationModel
+const MessageModel = mongoose.model<MessageDocument>("Message", MessageSchema);
+export default MessageModel
