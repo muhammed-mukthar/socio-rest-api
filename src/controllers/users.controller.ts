@@ -3,7 +3,7 @@ import { omit } from "lodash";
 import UserModel, { UserDocument } from "../models/user.model";
 
 
-import { DeleteUser, findUser, UpdateUser } from "../services/user.service";
+import { DeleteUser, findallUser, findUser, UpdateUser } from "../services/user.service";
 
 import createHashedPass from "../utils/hashpass";
 
@@ -39,8 +39,7 @@ export async function updateUserHandler(req: Request, res: Response) {
 
 export async function deleteUserHandler(req: Request, res: Response) {
   // @ts-ignore
-  if (req.body.userId === req.params.id || req.user.isAdmin ) {
-  
+  if (req.user.id === req.params.id || req.user.isAdmin ) {
     try {  
        DeleteUser(req.params.id).then(()=>res.status(200).json("Account has been Deleted"))
        .catch(()=>res.status(403).json("error happend while deleting"))
@@ -85,8 +84,8 @@ export async function followHandler(req:Request,res:Response){
   if(req.user.id !== req.params.id){
     try{
       const user=await findUser({_id:req.params.id})
-      
-      if(!user?.followers.includes(req.body.userId)){
+      //@ts-ignore
+      if(!user?.followers.includes(req.user.id)){
           //@ts-ignore
         await UpdateUser({_id:req.params.id},{$push:{followers:req.user.id}})
           //@ts-ignore
@@ -135,5 +134,27 @@ export async function unfollowHandler(req:Request,res:Response) {
   }else{
     res.status(403).json('you cant unfollow yourself')
   }
+  
+}
+
+//get all user
+
+export async function getAllUsersHandler(req:Request,res:Response) {
+  try{
+  //@ts-ignore
+const userId=req.user.id
+console.log(userId,'userId');
+
+const suggestedUser=await  findallUser({followers:{$nin:[userId]}})
+console.log(suggestedUser,'sfhkjhsafshdkfsd');
+
+res.json(suggestedUser)
+  }catch(err){
+  console.log(err,'sfsfadfsda');
+  
+    res.json(500).json({error:err})
+    
+  }
+
   
 }

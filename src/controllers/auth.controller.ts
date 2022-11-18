@@ -24,7 +24,7 @@ export async function createUserHandler(req:Request,res:Response) {
     
 
     }catch(err:any){
-         res.status(409).json(err.message);
+         res.status(409).json({err:err.message});
     }
      
        }
@@ -34,7 +34,7 @@ export async function createUserHandler(req:Request,res:Response) {
 export async function loginUserHandler(req:Request,res:Response) {
 let user=await loginUser(req.body)//get users details
     if(!user){
-        res.status(404).json({message:'user not found'})
+        res.status(200).json({message:'user not found'})
     }else{
         let userDetails:object={
             id:user._id,

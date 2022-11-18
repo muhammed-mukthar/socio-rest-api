@@ -65,18 +65,18 @@ export async function deletePostHandler(req: Request, res: Response) {
         
         const post = await findPost({ _id: req.params.id })
         
-        if(!post) return res.status(301).json('invalid post post')
-    
-        if ( post.userId == req.body.userId) {
+        if(!post) return res.status(301).json({error:'invalid post post'})
+      //@ts-ignore
+        if ( post.userId == req.user.id) {
               DeletePost(
               req.params.id
             ).then((e)=>res.json('post deleted successfully'))
             .catch((e)=>res.json(e))
         }else{
-            res.status(403).json("you can only dekete yours ");
+            res.status(403).json({error:"you can only delete yours "});
         }
     }catch(err){
-        res.json(err)
+        res.json({error:err})
     }
   }
 

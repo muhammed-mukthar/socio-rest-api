@@ -16,8 +16,8 @@ export interface UserDocument extends UserInput, mongoose.Document {
   updatedAt: Date;
   coverPic: string;
   profilePic: string;
-  followers: string[];
-  following: string[];
+  followers: [];
+  following: [];
   isAdmin: boolean;
   profilekey:string;
   coverkey:string;
@@ -33,8 +33,9 @@ const UserSchema = new mongoose.Schema(
     email: { type: String, required: true, unique: true },
     name: { type: String, required: true },
     password: { type: String, required: true },
+    profilePic:{ type: String, default: "https://vectorified.com/images/default-profile-picture-icon-3.png" },
     coverPic: { type: String, default: "https://images.fastcompany.net/image/upload/w_596,c_limit,q_auto:best,f_auto/wp-cms/uploads/2021/03/LinkedIn-Default-Background-2020-.jpg" },
-    profilekey: { type: String, default: "https://vectorified.com/images/default-profile-picture-icon-3.png" },
+    profilekey: { type: String },
     coverkey: { type: String,  },
 
     followers: {
