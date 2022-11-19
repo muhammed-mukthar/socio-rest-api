@@ -154,13 +154,16 @@ export async function deletePostHandler(req: Request, res: Response) {
     if(!currentUser ||currentUser ==null) return res.json('user not found')
     const userPosts = await findallPost({userId:currentUser._id})
     if(!userPosts) return  res.json('you have not posted')
-    const friendPosts = await Promise.all(
+    let friendPosts = await Promise.all(
       currentUser.following.map((friendId) => {
         return  findallPost({userId:friendId});
       })
     )
     
+    friendPosts=friendPosts.filter(post=>{return post!=false})
     
+
+
     //@ts-ignore
     res.json(userPosts.concat(...friendPosts))
   } catch (err) {
