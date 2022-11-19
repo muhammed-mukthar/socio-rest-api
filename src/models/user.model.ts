@@ -18,12 +18,12 @@ export interface UserDocument extends UserInput, mongoose.Document {
   profilePic: string;
   followers: [];
   following: [];
-  isAdmin: boolean;
   profilekey:string;
   coverkey:string;
   desc:string;
   city:string,
   relationship:number;
+  blocked:boolean;
   
   comparePassword(candidatePassword: string): Promise<Boolean>;
 }
@@ -46,10 +46,6 @@ const UserSchema = new mongoose.Schema(
       type: Array,
       default: [],
     },
-    isAdmin: {
-      type: Boolean,
-      default: false,
-    },
     desc:{
         type:String,
         max:50,
@@ -59,6 +55,9 @@ const UserSchema = new mongoose.Schema(
         type:String,
         max:50,
     
+      }, blocked: {
+        type: Boolean,
+        default:false,
       },
       relationship:{
         type:Number,
