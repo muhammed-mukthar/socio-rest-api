@@ -1,5 +1,6 @@
 
 import { Request, Response } from "express";
+import {  LoginAdmin } from "../services/admin.service";
 
 import {  createUser, loginUser } from "../services/auth.service";
 
@@ -39,7 +40,7 @@ let user=await loginUser(req.body)//get users details
         let userDetails:object={
             _id:user._id,
             email:user.email,
-            isAdmin:user.isAdmin,
+            // isAdmin:user.isAdmin,
             profilePic:user.profilePic,
             followers:user.followers,
             following:user.following,
@@ -52,3 +53,29 @@ let user=await loginUser(req.body)//get users details
     }
 }
     
+
+
+export async function adminLogin(req:Request,res:Response) {
+    try {
+        if (req.body.email && req.body.password) {
+          const user = await LoginAdmin(req.body);
+          if(!user){
+            res.status(200).json({message:'user not found'})
+        }else{
+            let AdminDetails:object={
+                _id:user._id,
+                email:user.email,
+                isAdmin:user.isAdmin,
+            }
+            const accessToken=generateAccessToken(AdminDetails)
+            const refreshToken=generateRefreshToken(AdminDetails)
+            res.json({accessToken,refreshToken,...AdminDetails})
+        }
+         
+        } else {
+          res.status(400).json("please fill all the credentials")
+        }
+      } catch (err) {
+        res.status(500).json(err)
+      }
+}

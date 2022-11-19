@@ -58,7 +58,6 @@ export async function reIssueAccessToken({
   let userDetails:object={
     id:user._id,
     email:user.email,
-    isAdmin:user.isAdmin
 }
   const accessToken = generateAccessToken(userDetails)
 

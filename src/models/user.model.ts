@@ -24,7 +24,6 @@ export interface UserDocument extends UserInput, mongoose.Document {
   city:string,
   relationship:number;
   blocked:boolean;
-  
   comparePassword(candidatePassword: string): Promise<Boolean>;
 }
 

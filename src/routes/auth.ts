@@ -1,6 +1,6 @@
 import express,{Request,Response} from 'express'
 
-import { createUserHandler, loginUserHandler } from '../controllers/auth.controller';
+import { adminLogin, createUserHandler, loginUserHandler } from '../controllers/auth.controller';
 import validateResource from '../middleware/validateResource';
 
 import { createUserSchema, loginUserSchema } from '../schema/users.schema';
@@ -20,5 +20,8 @@ router.post('/register',validateResource(createUserSchema),createUserHandler)
 
 router.post('/login',validateResource(loginUserSchema),loginUserHandler)
 
+
+//admin login
+router.post("/admin-login",adminLogin);
 
 export default router
