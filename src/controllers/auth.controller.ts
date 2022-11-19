@@ -37,7 +37,7 @@ let user=await loginUser(req.body)//get users details
         res.status(200).json({message:'user not found'})
     }else{
         let userDetails:object={
-            id:user._id,
+            _id:user._id,
             email:user.email,
             isAdmin:user.isAdmin,
             profilePic:user.profilePic,

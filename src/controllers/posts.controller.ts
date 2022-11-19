@@ -16,7 +16,10 @@ export async function createPostHandler(req: Request, res: Response) {
     
     
     //@ts-ignore
-    const userId=req.user.id
+    const userId=req.user._id
+
+    
+    
     const postbody={
       ...req.body,
       userId:userId
@@ -67,7 +70,7 @@ export async function deletePostHandler(req: Request, res: Response) {
         
         if(!post) return res.status(301).json({error:'invalid post post'})
       //@ts-ignore
-        if ( post.userId == req.user.id) {
+        if ( post.userId == req.user._id) {
               DeletePost(
               req.params.id
             ).then((e)=>res.json('post deleted successfully'))
@@ -87,7 +90,7 @@ export async function deletePostHandler(req: Request, res: Response) {
   export async function likeDislikeHandler(req: Request, res: Response) {
     try{
       //@ts-ignore
-      console.log(req.user.id,'hallo i am here');
+      console.log(req.user._id,'hallo i am here');
       
       const post = await findPost({ _id: req.params.id }) 
       console.log(post,'fsfsd');
@@ -95,11 +98,11 @@ export async function deletePostHandler(req: Request, res: Response) {
       if(!post) return res.status(404).json('post not found')
       
       //@ts-ignore
-      if(!post.likes.includes(req.user.id)){
+      if(!post.likes.includes(req.user._id)){
       await UpdatePost(
           { _id: req.params.id },
            //@ts-ignore
-          { $push: {likes:req.user.id}})
+          { $push: {likes:req.user._id}})
           // console.log(post.likes.includes(req.body.userId),'sfsff');
           
           res.json("The post has been liked")
@@ -107,7 +110,7 @@ export async function deletePostHandler(req: Request, res: Response) {
          await UpdatePost(
           { _id: req.params.id },
           //@ts-ignore
-          { $pull: {likes:req.user.id}})
+          { $pull: {likes:req.user._id}})
           res.json("The post has been disliked")
       }
     }catch(err){
@@ -146,7 +149,7 @@ export async function deletePostHandler(req: Request, res: Response) {
     try{
       let user:mongoose.Types.ObjectId
       //@ts-ignore
-      user=new objectid(req.user.id) 
+      user=new objectid(req.user._id) 
     const currentUser = await findUser({_id:user});
     if(!currentUser ||currentUser ==null) return res.json('user not found')
     const userPosts = await findallPost({userId:currentUser._id})
@@ -168,12 +171,9 @@ export async function deletePostHandler(req: Request, res: Response) {
 
 export async function createcommentHandler(req: Request, res: Response) {
   try{
- 
-    
-
             const comments={
               //@ts-ignore
-                  user:req.user.id,
+                  user:req.user._id,
                     //@ts-ignore
                   name:req.body.name,
                  

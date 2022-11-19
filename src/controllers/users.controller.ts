@@ -12,16 +12,13 @@ export async function updateUserHandler(req: Request, res: Response) {
   console.log(req.body,'bofy here');
   
   //@ts-ignore
-  if (req.user.id === req.params.id) {
+  if (req.user._id === req.params.id) {
     // if (req.body.userId === req.params.id ) {
-    if (req.body.password) {
       try {
+    if (req.body.password) {
+
         req.body.password = await createHashedPass(req.body.password);
-      } catch (err) {
-        return res.status(403).json("you can only update your account");
-      }
     }
-    try {
       await UpdateUser(
         { _id: req.params.id },
         { $set: req.body }
@@ -39,7 +36,7 @@ export async function updateUserHandler(req: Request, res: Response) {
 
 export async function deleteUserHandler(req: Request, res: Response) {
   // @ts-ignore
-  if (req.user.id === req.params.id || req.user.isAdmin ) {
+  if (req.user._id === req.params.id || req.user.isAdmin ) {
     try {  
        DeleteUser(req.params.id).then(()=>res.status(200).json("Account has been Deleted"))
        .catch(()=>res.status(403).json("error happend while deleting"))
@@ -61,11 +58,14 @@ export async function deleteUserHandler(req: Request, res: Response) {
 export async function getUserHandler(req:Request,res:Response){
 
     try{
+      console.log('i am here');
+      
         const user=await findUser({_id:req.params.id})
       
     
+       console.log(user,'user here');
        
-          res.status(200).json(omit(user,'password','updatedAt'))
+          res.status(200).json(omit(user,'password'))
        
      
     }catch(err){
@@ -81,15 +81,15 @@ export async function getUserHandler(req:Request,res:Response){
 
 export async function followHandler(req:Request,res:Response){
     //@ts-ignore
-  if(req.user.id !== req.params.id){
+  if(req.user._id !== req.params.id){
     try{
       const user=await findUser({_id:req.params.id})
       //@ts-ignore
-      if(!user?.followers.includes(req.user.id)){
+      if(!user?.followers.includes(req.user._id)){
           //@ts-ignore
-        await UpdateUser({_id:req.params.id},{$push:{followers:req.user.id}})
+        await UpdateUser({_id:req.params.id},{$push:{followers:req.user._id}})
           //@ts-ignore
-        await UpdateUser({_id:req.user.id},{$push:{following:req.params.id}})
+        await UpdateUser({_id:req.user._id},{$push:{following:req.params.id}})
         console.log('yay');
         res.json('user has been followed')
       }else{
@@ -108,17 +108,17 @@ export async function followHandler(req:Request,res:Response){
 
 export async function unfollowHandler(req:Request,res:Response) {
   //@ts-ignore
-  if(req.user.id !== req.params.id){
+  if(req.user._id !== req.params.id){
     try{
       const user=await findUser({_id:req.params.id})
         //@ts-ignore
-      const currentUser=await findUser({_id:req.user.id})
+      const currentUser=await findUser({_id:req.user._id})
         //@ts-ignore
-      if(user?.followers.includes(req.user.id)){
+      if(user?.followers.includes(req.user._id)){
           //@ts-ignore
-        await UpdateUser({_id:req.params.id},{$pull:{followers:req.user.id}})
+        await UpdateUser({_id:req.params.id},{$pull:{followers:req.user._id}})
           //@ts-ignore
-        await UpdateUser({_id:req.user.id},{$pull:{following:req.params.id}})
+        await UpdateUser({_id:req.user._id},{$pull:{following:req.params.id}})
         res.json('user has been unfollowed')
         console.log('yay');
         
@@ -142,19 +142,14 @@ export async function unfollowHandler(req:Request,res:Response) {
 export async function getAllUsersHandler(req:Request,res:Response) {
   try{
   //@ts-ignore
-const userId=req.user.id
-console.log(userId,'userId');
+const userId=req.user._id
 
+console.log(userId,'userId');
 const suggestedUser=await  findallUser({followers:{$nin:[userId]}})
 console.log(suggestedUser,'sfhkjhsafshdkfsd');
-
 res.json(suggestedUser)
   }catch(err){
   console.log(err,'sfsfadfsda');
-  
-    res.json(500).json({error:err})
-    
+    res.json(500).json({error:err}) 
   }
-
-  
 }
