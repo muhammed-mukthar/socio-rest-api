@@ -1,5 +1,5 @@
 import express,{Request,Response} from 'express'
-import { deleteUserHandler, followHandler, getAllUsersHandler, getUserHandler, unfollowHandler, updateUserHandler } from '../controllers/users.controller'
+import { blockUserHandler, deleteUserHandler, followHandler, getAllUsersHandler, getUserHandler, unblockHandler, unfollowHandler, updateUserHandler } from '../controllers/users.controller'
 import { VerifyTokenAndReissue } from '../middleware/jwtvalidate'
 import UserModel from '../models/user.model'
 
@@ -15,4 +15,10 @@ router.route('/:id')
 router.put('/:id/follow',VerifyTokenAndReissue,followHandler)
 /* ----------------------------- unfollow a user ---------------------------- */
 router.put('/:id/unfollow',VerifyTokenAndReissue,unfollowHandler)
+//block user
+router.put("/block/:id",blockUserHandler);
+
+//unblock user
+router.put("/unblock/:id",unblockHandler);
+
 export default router

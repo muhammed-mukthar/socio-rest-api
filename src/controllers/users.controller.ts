@@ -153,3 +153,31 @@ res.json(suggestedUser)
     res.json(500).json({error:err}) 
   }
 }
+
+export async function blockUserHandler(req:Request,res:Response){
+
+  try {
+    await UserModel.findByIdAndUpdate(req.params.id, {
+      $set: {blocked:true},
+    });
+    res.status(200).json("Account blocked successfully");
+
+  } catch (err) {
+    return res.status(500).json(err);
+  }
+
+}
+
+export async function unblockHandler (req:Request,res:Response)  {
+
+  try {
+    await UserModel.findByIdAndUpdate(req.params.id, {
+      $set: {blocked:false},
+    });
+    res.status(200).json("Account unblocked successfully");
+
+  } catch (err) {
+    return res.status(500).json(err);
+  }
+
+} 

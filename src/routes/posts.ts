@@ -1,5 +1,6 @@
 import express, { Request, Response } from "express";
 import {
+  allPostsHandler,
   createcommentHandler,
   createPostHandler,
   deletecommentHandler,
@@ -40,4 +41,7 @@ router.put('/:id/comment',VerifyTokenAndReissue,createcommentHandler)
 //edi comment
 router.put('/:id/uncomment',VerifyTokenAndReissue,deletecommentHandler)
 
+
+//all posts
+router.get("/",allPostsHandler);
 export default router;

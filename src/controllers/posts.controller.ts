@@ -216,3 +216,13 @@ export async function deletecommentHandler(req: Request, res: Response){
     res.status(500).json(err)
   }
 }
+
+export async function allPostsHandler (req: Request, res: Response) {
+  try {
+    // const user = await User.findOne({ username: req.params.username });
+    const posts = await PostModel.find();
+    res.status(200).json(posts);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+}
