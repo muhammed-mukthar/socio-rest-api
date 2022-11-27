@@ -59,7 +59,6 @@ export async function adminLogin(req:Request,res:Response) {
     try {
         if (req.body.email && req.body.password) {
           const user = await LoginAdmin(req.body);
-          console.log(user,'user');
           
           if(!user){
             res.status(200).json({message:'user not found'})

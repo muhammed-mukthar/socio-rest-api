@@ -16,8 +16,8 @@ export async function LoginAdmin({
         return false;
       }
       const isValid = await user.comparePassword(password);
+      console.log(isValid,'is valid checking');
       if (!isValid) return false;
-  
       return omit(user.toJSON(), "password");
     }catch(err){
       console.log(err);

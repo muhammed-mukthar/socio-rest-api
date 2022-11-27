@@ -12,6 +12,7 @@ export interface PostDocument extends postinput,  mongoose.Document {
     likes: string[];
     comments:[];
     img:string,
+    reports:[],
     updatedAt: Date;
     createdAt: Date;
   }
@@ -31,6 +32,10 @@ const PostSchema = new mongoose.Schema(
      },
      key:{
       type:String,
+      
+   }, 
+   reports:{
+      type:Array,
       
    },
      likes:{

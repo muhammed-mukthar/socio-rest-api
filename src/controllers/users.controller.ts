@@ -9,8 +9,7 @@ import createHashedPass from "../utils/hashpass";
 
 /* ------------------------------- update user ------------------------------ */
 export async function updateUserHandler(req: Request, res: Response) {
-  console.log(req.body,'bofy here');
-  
+
   //@ts-ignore
   if (req.user._id === req.params.id) {
     // if (req.body.userId === req.params.id ) {
@@ -58,12 +57,11 @@ export async function deleteUserHandler(req: Request, res: Response) {
 export async function getUserHandler(req:Request,res:Response){
 
     try{
-      console.log('i am here');
+      
       
         const user=await findUser({_id:req.params.id})
       
-    
-       console.log(user,'user here');
+
        
           res.status(200).json(omit(user,'password'))
        
@@ -90,7 +88,7 @@ export async function followHandler(req:Request,res:Response){
         await UpdateUser({_id:req.params.id},{$push:{followers:req.user._id}})
           //@ts-ignore
         await UpdateUser({_id:req.user._id},{$push:{following:req.params.id}})
-        console.log('yay');
+       
         res.json('user has been followed')
       }else{
         res.status(403).json('you already follow this user')
@@ -120,11 +118,11 @@ export async function unfollowHandler(req:Request,res:Response) {
           //@ts-ignore
         await UpdateUser({_id:req.user._id},{$pull:{following:req.params.id}})
         res.json('user has been unfollowed')
-        console.log('yay');
+   
         
       }else{
         res.status(403).json('you havent followed this user')
-        console.log('i am here');
+       
         
       }    
     }catch(err){
@@ -144,12 +142,12 @@ export async function getAllUsersHandler(req:Request,res:Response) {
   //@ts-ignore
 const userId=req.user._id
 
-console.log(userId,'userId');
+
 const suggestedUser=await  findallUser({followers:{$nin:[userId]}})
-console.log(suggestedUser,'sfhkjhsafshdkfsd');
+
 res.json(suggestedUser)
   }catch(err){
-  console.log(err,'sfsfadfsda');
+  
     res.json(500).json({error:err}) 
   }
 }

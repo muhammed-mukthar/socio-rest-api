@@ -24,7 +24,7 @@ export async function createPostHandler(req: Request, res: Response) {
       ...req.body,
       userId:userId
     }
-    console.log(postbody,'postbody');
+
     
     const newPost = await createPost(postbody);
     if (newPost) {
@@ -70,16 +70,16 @@ export async function deletePostHandler(req: Request, res: Response) {
         
         if(!post) return res.status(301).json({error:'invalid post post'})
       //@ts-ignore
-        if ( post.userId == req.user._id) {
+        if ( post.userId == req.user._id  || req.user.isAdmin) {
               DeletePost(
               req.params.id
             ).then((e)=>res.json('post deleted successfully'))
-            .catch((e)=>res.json(e))
+            .catch((e)=>res.status(403).json(e))
         }else{
             res.status(403).json({error:"you can only delete yours "});
         }
     }catch(err){
-        res.json({error:err})
+        res.status(403).json({error:err})
     }
   }
 
@@ -89,11 +89,10 @@ export async function deletePostHandler(req: Request, res: Response) {
 
   export async function likeDislikeHandler(req: Request, res: Response) {
     try{
-      //@ts-ignore
-      console.log(req.user._id,'hallo i am here');
+     
       
       const post = await findPost({ _id: req.params.id }) 
-      console.log(post,'fsfsd');
+   
       
       if(!post) return res.status(404).json('post not found')
       
@@ -103,9 +102,9 @@ export async function deletePostHandler(req: Request, res: Response) {
           { _id: req.params.id },
            //@ts-ignore
           { $push: {likes:req.user._id}})
-          // console.log(post.likes.includes(req.body.userId),'sfsff');
           
-          res.json("The post has been liked")
+          
+        
       }else{
          await UpdatePost(
           { _id: req.params.id },
@@ -186,9 +185,7 @@ export async function createcommentHandler(req: Request, res: Response) {
             }
   const post=await findPost({_id:req.params.id})
   if(post){
-   
-    console.log(comments,'comments');
-    
+  
     await UpdatePost(
       { _id: req.params.id },
       //@ts-ignore
@@ -224,5 +221,24 @@ export async function allPostsHandler (req: Request, res: Response) {
     res.status(200).json(posts);
   } catch (err) {
     res.status(500).json(err);
+  }
+}
+
+
+export async function ReportPostHandler (req: Request, res: Response) {
+  try{
+  const postExist=await findPost({_id:req.params.id})
+  if(postExist){
+    await UpdatePost({
+      _id:req.params.id
+    },{$push:{reports:req.body}})
+    res.json('post reported')
+ 
+  } else{
+     res.json('post not found')
+  }
+
+  }catch(err){
+    res.status(500).json(err)
   }
 }

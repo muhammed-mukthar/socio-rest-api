@@ -8,7 +8,7 @@ router.get('/suggestedusers',VerifyTokenAndReissue,getAllUsersHandler)
 router.route('/:id')
 .put(VerifyTokenAndReissue,updateUserHandler)//update user
 .delete(VerifyTokenAndReissue,deleteUserHandler)//delete user
-.get(VerifyTokenAndReissue,getUserHandler)//get user
+.get(getUserHandler)//get user
 
 
 /* ------------------------------ follow a user ----------------------------- */

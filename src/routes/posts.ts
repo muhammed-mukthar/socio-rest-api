@@ -7,6 +7,7 @@ import {
   deletePostHandler,
   getsinglePostHandler,
   likeDislikeHandler,
+  ReportPostHandler,
   timelinePostHandler,
   updatePostHandler,
   userPostHandler,
@@ -41,6 +42,8 @@ router.put('/:id/comment',VerifyTokenAndReissue,createcommentHandler)
 //edi comment
 router.put('/:id/uncomment',VerifyTokenAndReissue,deletecommentHandler)
 
+
+router.put('/:id/report',VerifyTokenAndReissue,ReportPostHandler)
 
 //all posts
 router.get("/",allPostsHandler);

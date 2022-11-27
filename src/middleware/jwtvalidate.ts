@@ -10,29 +10,21 @@ export const VerifyTokenAndReissue = async (
   res: Response,
   next: NextFunction
 ) => {
- 
-  
   const accessToken = get(req, "headers.authorization", "").replace(
     /^Bearer\s/,
     ""
   );
   const refreshToken = get(req, "headers.x-refresh");
-
-
   if (!accessToken) {
     res.status(403).json('you are not allowed to do it')
   }else{
     const { decoded, expired } = verifyJwt(accessToken, "accessTokenSecret");
-
-
   if (decoded) {
     //@ts-ignore
     req.user = decoded;
     return next();
   }else if (expired && refreshToken) {
     const newAccessToken = await reIssueAccessToken({ refreshToken });
-
-
     if (newAccessToken) {
       res.setHeader("x-access-token", newAccessToken);
       const result = verifyJwt(newAccessToken, "accessTokenSecret");
@@ -42,8 +34,6 @@ export const VerifyTokenAndReissue = async (
     }else{
       res.json('cannot send new access token')
     }
-
-    
   }else{
     res.status(403).json('token not valid')
   }
