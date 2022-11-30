@@ -12,7 +12,7 @@ import {
   updatePostHandler,
   userPostHandler,
 } from "../controllers/posts.controller";
-import { VerifyTokenAndReissue } from "../middleware/jwtvalidate";
+import { verifyAdmin, VerifyTokenAndReissue } from "../middleware/jwtvalidate";
 import validateResource from "../middleware/validateResource";
 import { createPostSchema } from "../schema/post.schema";
 
@@ -46,5 +46,5 @@ router.put('/:id/uncomment',VerifyTokenAndReissue,deletecommentHandler)
 router.put('/:id/report',VerifyTokenAndReissue,ReportPostHandler)
 
 //all posts
-router.get("/",allPostsHandler);
+router.get("/",verifyAdmin,allPostsHandler);
 export default router;

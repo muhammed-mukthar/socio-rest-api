@@ -32,14 +32,14 @@ export const createChat = async (req:Request,res:Response) => {
       if(chat){
         res.status(200).json(chat)
       }else{
-        const newChat = new ConversationModel({
-          members: [req.body.senderId, req.body.receiverId],
-        });
-          const result = await newChat.save();
-          res.status(200).json(result)
+        // const newChat = new ConversationModel({
+        //   members: [req.body.senderId, req.body.receiverId],
+        // });
+        //   const result = await newChat.save();
+          res.status(200).json({message:'conversation not found'})
 
       }
     } catch (error) {
-      res.status(500).json(error)
+      res.status(500).json({error:error})
     }
   };

@@ -77,22 +77,45 @@ export async function getUserHandler(req:Request,res:Response){
 /* ------------------------------ follow a user ----------------------------- */
 
 
-export async function followHandler(req:Request,res:Response){
-    //@ts-ignore
+export async function followHandler(req: { user: {
+  name: any; _id: any; 
+}; params: { id: any; }; body: {
+  message: any; name: any; comments: any; profile: any; 
+}; },res:Response){
+   
   if(req.user._id !== req.params.id){
     try{
       const user=await findUser({_id:req.params.id})
-      //@ts-ignore
+      const currentuser=await findUser({_id:req.user._id})
+
+if(currentuser){
+  const notif={
+      
+            user:currentuser?._id,
+           
+            name:currentuser.name,
+           
+            message:`${currentuser.name} started following you`,
+        
+            profile:currentuser.profilePic
+      }
+
+      
+  //@ts-ignore
       if(!user?.followers.includes(req.user._id)){
-          //@ts-ignore
-        await UpdateUser({_id:req.params.id},{$push:{followers:req.user._id}})
-          //@ts-ignore
+         
+        await UpdateUser({_id:req.params.id},{$push:{followers:req.user._id,notif:notif}})
+        
         await UpdateUser({_id:req.user._id},{$push:{following:req.params.id}})
        
         res.json('user has been followed')
+        
       }else{
         res.status(403).json('you already follow this user')
-      }    
+      }  
+    }else{
+      res.status(403).json('current user cannot be found')
+    }  
     }catch(err){
       res.status(500).json(err)
     }
@@ -179,3 +202,34 @@ export async function unblockHandler (req:Request,res:Response)  {
   }
 
 } 
+
+
+export async function getFriendsHandler(req:Request,res:Response)  {
+  try {
+    //@ts-ignore
+    const user = await UserModel.findById(req.params.userId);
+    console.log(user,'user here');
+    
+    const friends = await Promise.all(
+          //@ts-ignore
+      user.following.map((friendId: any) => {
+        return UserModel.findById(friendId);
+      })
+    );
+    let friendList: { _id: any; name: string; profilePic: string; }[]= [];
+    friends.map((friend) => {
+      if (friend!=null) {
+        const { _id, name, profilePic } = friend;
+        friendList.push({ _id, name, profilePic });
+      }
+     
+    });
+    res.status(200).json(friendList)
+  } catch (err) {
+    console.log(err);
+    
+    res.status(500).json(err);
+    console.log(err);
+  }
+}
+  

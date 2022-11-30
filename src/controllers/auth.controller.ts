@@ -7,7 +7,10 @@ import {  createUser, loginUser } from "../services/auth.service";
 import {  findUser } from "../services/user.service";
 import { generateAccessToken, generateRefreshToken } from "../utils/jwt.utils";
 
-
+const serverSID =process.env.Twilio_ServerSID
+const accountSID = process.env.Twilio_AccountSID
+const authtoken = process.env.Twilio_Authtoken
+const client = require('twilio')(accountSID, authtoken)
 /* ------------------------------- create user ------------------------------ */
 export async function createUserHandler(req:Request,res:Response) {
     try{
@@ -42,8 +45,9 @@ let user=await loginUser(req.body)//get users details
             email:user.email,
             // isAdmin:user.isAdmin,
             profilePic:user.profilePic,
-            followers:user.followers,
-            following:user.following,
+            followers:user?.followers,
+            following:user?.following,
+            notif:user?.notif,
             name:user.name
 
         }
@@ -62,6 +66,8 @@ export async function adminLogin(req:Request,res:Response) {
           
           if(!user){
             res.status(200).json({message:'user not found'})
+        }else if(user.blocked){
+            res.status(200).json({message:'user is restricted '})
         }else{
             let AdminDetails:object={
                 _id:user._id,
@@ -80,3 +86,41 @@ export async function adminLogin(req:Request,res:Response) {
         res.status(500).json(err)
       }
 }
+
+
+export async function verifyotpHandler(req:Request, res:Response){
+    const { otp, phno } = req.body
+    client.verify
+      .services(serverSID)
+      .verificationChecks.create({ to: `+91${phno}`, code: otp })
+      .then((resp: { valid: any; }) => {
+        console.log(resp);
+        
+        if (!resp.valid) {
+        res.json('not login')
+        
+        } else {
+        res.json(' login')
+        }
+      }) .catch((err: any) => {
+        console.log(err)
+      })
+  
+      
+    }
+
+
+    export async function sentotpHandler(req:Request, res:Response)  {
+        client.verify
+          .services(serverSID)
+          .verifications.create({
+            to: `+91${req.body.phno}`,
+            channel: 'sms',
+          })
+          .then((data: any) => {
+         res.json('otp sent')
+          })
+          .catch((err: any) => {
+           res.json('otp not sent')
+          })
+      }

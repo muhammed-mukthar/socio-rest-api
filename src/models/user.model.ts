@@ -22,6 +22,7 @@ export interface UserDocument extends UserInput, mongoose.Document {
   coverkey:string;
   desc:string;
   city:string,
+  notif:[],
   relationship:number;
   blocked:boolean;
   comparePassword(candidatePassword: string): Promise<Boolean>;
@@ -57,7 +58,13 @@ const UserSchema = new mongoose.Schema(
       }, blocked: {
         type: Boolean,
         default:false,
-      },
+      }, notif:[{type: new mongoose.Schema({
+        user: { type:mongoose.Schema.Types.ObjectId, ref: "User", },  
+        name:{type:String},
+        profile:{type:String},
+        message: { type: String}},
+      {timestamps: true})}],
+      
       relationship:{
         type:Number,
         enum:[1,2,3],
