@@ -62,7 +62,6 @@ export async function getUserHandler(req:Request,res:Response){
         const user=await findUser({_id:req.params.id})
       
 
-       
           res.status(200).json(omit(user,'password'))
        
      

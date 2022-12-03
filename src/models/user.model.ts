@@ -2,12 +2,14 @@ import mongoose, { model } from "mongoose";
 import bcrypt from "bcrypt";
 import config from "config";
 import { type } from "os";
+import { number } from "zod";
 
 
 
 export interface UserInput {
   email: string;
   name: string;
+  phone:number;
   password: string;
   
 }
@@ -41,6 +43,11 @@ const UserSchema = new mongoose.Schema(
     followers: {
       type: Array,
       default: [],
+    },
+    phone:{
+      type:Number,
+
+
     },
     following: {
       type: Array,

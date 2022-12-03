@@ -27,7 +27,7 @@ router.post('/login',validateResource(loginUserSchema),loginUserHandler)
 router.post("/admin-login",adminLogin);
 
 
-router.post('/enterphno', sentotpHandler)
+router.post('/sendotp', sentotpHandler)
 
 
   

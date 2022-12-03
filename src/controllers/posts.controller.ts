@@ -95,6 +95,7 @@ export async function likeDislikeHandler(req: Request, res: Response) {
         //@ts-ignore
         { $push: { likes: req.user._id } }
       );
+      res.json("The post has been liked");
     } else {
       await UpdatePost(
         { _id: req.params.id },
