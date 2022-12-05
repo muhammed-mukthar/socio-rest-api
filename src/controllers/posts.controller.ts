@@ -10,7 +10,7 @@ import {
 } from "../services/post.service";
 import mongoose, { ObjectId } from "mongoose";
 import { strict } from "assert";
-import { findUser } from "../services/user.service";
+import { findUser, UpdateUser } from "../services/user.service";
 import { string } from "zod";
 import { rmSync } from "fs";
 
@@ -86,16 +86,47 @@ export async function likeDislikeHandler(req: Request, res: Response) {
   try {
     const post = await findPost({ _id: req.params.id });
 
-    if (!post) return res.status(404).json("post not found");
+    //@ts-ignore
+    const currentuser = await findUser({ _id: req.user._id })
 
+    if (!post) return res.status(404).json("post not found");
+    const user = await findUser({ _id: post.userId })
     //@ts-ignore
     if (!post.likes.includes(req.user._id)) {
-      await UpdatePost(
-        { _id: req.params.id },
+      const checkUseralreadyliked = (obj: { post: any; }) => obj.post == post._id;
+      console.log(user?.notif?.some(checkUseralreadyliked));
         //@ts-ignore
-        { $push: { likes: req.user._id } }
-      );
-      res.json("The post has been liked");
+      console.log(user?._id,req.user?._id);
+      //@ts-ignore
+      console.log( (user?._id) ==req.user?._id,'y');
+      //@ts-ignore
+      if (user?.notif?.some(checkUseralreadyliked) || user?._id==req.user?._id) {
+        await UpdatePost(
+          { _id: req.params.id },
+          //@ts-ignore
+          { $push: { likes: req.user._id } }
+        );
+        res.json("The post has been liked");
+      } else {
+        const notif = {
+
+          user: currentuser?._id,
+
+          name: currentuser?.name,
+          post: req.params.id,
+          message: `${currentuser?.name} liked your post `,
+
+          profile: currentuser?.profilePic
+        }
+
+        await UpdatePost(
+          { _id: req.params.id },
+          //@ts-ignore
+          { $push: { likes: req.user._id } }
+        );
+        await UpdateUser({ _id: user?._id }, { $push: { notif: notif } })
+        res.json("The post has been liked");
+      }
     } else {
       await UpdatePost(
         { _id: req.params.id },

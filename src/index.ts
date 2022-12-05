@@ -25,11 +25,10 @@ const port = config.get<number>("port");
 //     res.header("Access-Control-Allow-Credentials", true);
 //     next();
 //   });
-  app.use(
-    cors({
-      "origin": "*",
-    })
-  );
+
+//@ts-ignore
+app.use(cors("*"));
+
 app.use(helmet())
 app.use(morgan('common'))
 app.use(cors())

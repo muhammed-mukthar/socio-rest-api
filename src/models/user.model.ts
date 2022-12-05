@@ -4,8 +4,6 @@ import config from "config";
 import { type } from "os";
 import { number } from "zod";
 
-
-
 export interface UserInput {
   email: string;
   name: string;
@@ -66,9 +64,10 @@ const UserSchema = new mongoose.Schema(
         type: Boolean,
         default:false,
       }, notif:[{type: new mongoose.Schema({
-        user: { type:mongoose.Schema.Types.ObjectId, ref: "User", },  
+        user: {type:String},  
         name:{type:String},
         profile:{type:String},
+        post:{type:String},
         message: { type: String}},
       {timestamps: true})}],
       
