@@ -68,6 +68,7 @@ const UserSchema = new mongoose.Schema(
         name:{type:String},
         profile:{type:String},
         post:{type:String},
+        postPic:{type:String},
         message: { type: String}},
       {timestamps: true})}],
       

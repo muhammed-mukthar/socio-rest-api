@@ -114,6 +114,7 @@ export async function likeDislikeHandler(req: Request, res: Response) {
 
           name: currentuser?.name,
           post: req.params.id,
+          postPic:post?.img,
           message: `${currentuser?.name} liked your post `,
 
           profile: currentuser?.profilePic

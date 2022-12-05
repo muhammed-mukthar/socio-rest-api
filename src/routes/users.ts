@@ -1,6 +1,6 @@
 import express,{Request,Response} from 'express'
-import { blockUserHandler, deleteUserHandler, followHandler, getAllUsersHandler, getFriendsHandler, getUserHandler, unblockHandler, unfollowHandler, updateUserHandler } from '../controllers/users.controller'
-import { verifyAdmin, VerifyTokenAndReissue } from '../middleware/jwtvalidate'
+import { blockUserHandler, deleteUserHandler, filterHandler, followHandler, getAllUsersHandler, getFriendsHandler, getUserHandler, unblockHandler, unfollowHandler, updateUserHandler } from '../controllers/users.controller'
+import { verifyAdmin, verifyTokenAndAuthorization, VerifyTokenAndReissue } from '../middleware/jwtvalidate'
 import UserModel from '../models/user.model'
 
 const router=express.Router()
@@ -21,6 +21,9 @@ router.put("/block/:id",verifyAdmin,blockUserHandler);
 
 //unblock user
 router.put("/unblock/:id",verifyAdmin,unblockHandler);
+
+//filter User
+router.post('/filteruser',verifyTokenAndAuthorization,filterHandler)
 
 //get friends
 router.get("/friends/:userId",VerifyTokenAndReissue, getFriendsHandler);

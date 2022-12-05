@@ -248,3 +248,27 @@ export async function getFriendsHandler(req: Request, res: Response) {
   }
 }
 
+
+export async function filterHandler(req: { body: { search: string; }; } ,res:Response){
+  try{
+    console.log('i am here');
+    
+    var search=''
+    if(req.body.search){
+      search=req.body.search
+    }
+    // console.log(req.query);
+    
+    let userdetails = await findallUser({$or:[
+      {
+       name:{$regex:'.*'+search+'.*',$options:'i'} 
+      }
+    ]})
+    console.log(userdetails);
+    
+    res.json(userdetails)
+  }catch(err){
+    res.status(500).json('some error happpened in searching')
+  }
+ 
+}
