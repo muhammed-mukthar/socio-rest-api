@@ -1,5 +1,5 @@
 import express,{Request,Response} from 'express'
-import { blockUserHandler, deleteUserHandler, filterHandler, followHandler, getAllUsersHandler, getFriendsHandler, getUserHandler, unblockHandler, unfollowHandler, updateUserHandler } from '../controllers/users.controller'
+import { blockUserHandler, deleteUserHandler, filterHandler, followHandler, getAllUsersHandler, getFollowersHandler, getFollowingsHandler, getFriendsHandler, getUserHandler, unblockHandler, unfollowHandler, updateUserHandler } from '../controllers/users.controller'
 import { verifyAdmin, verifyTokenAndAuthorization, VerifyTokenAndReissue } from '../middleware/jwtvalidate'
 import UserModel from '../models/user.model'
 
@@ -27,5 +27,12 @@ router.post('/filteruser',verifyTokenAndAuthorization,filterHandler)
 
 //get friends
 router.get("/friends/:userId",VerifyTokenAndReissue, getFriendsHandler);
+
+//followers list
+router.get('/followers/:id', VerifyTokenAndReissue, getFollowersHandler)
+
+//followings list
+router.get('/followings/:id', VerifyTokenAndReissue, getFollowingsHandler)
+
 
 export default router

@@ -13,6 +13,7 @@ import { strict } from "assert";
 import { findUser, UpdateUser } from "../services/user.service";
 import { string } from "zod";
 import { rmSync } from "fs";
+import { createNotif, findNotif } from "../services/notif.service";
 
 const objectid = mongoose.Types.ObjectId;
 
@@ -91,16 +92,18 @@ export async function likeDislikeHandler(req: Request, res: Response) {
 
     if (!post) return res.status(404).json("post not found");
     const user = await findUser({ _id: post.userId })
+    const notif = await findNotif({ user: post.userId })
     //@ts-ignore
     if (!post.likes.includes(req.user._id)) {
-      const checkUseralreadyliked = (obj: { post: any; }) => obj.post == post._id;
-      console.log(user?.notif?.some(checkUseralreadyliked));
-        //@ts-ignore
-      console.log(user?._id,req.user?._id);
+      const checkUseralreadyliked = (obj: { post: any }) => obj.post == post._id;
       //@ts-ignore
-      console.log( (user?._id) ==req.user?._id,'y');
+      console.log(notif?.some(checkUseralreadyliked));
+      // //@ts-ignore
+      // console.log(user?._id, req.user?._id);
+      // //@ts-ignore
+      // console.log((user?._id) == req.user?._id, 'y');
       //@ts-ignore
-      if (user?.notif?.some(checkUseralreadyliked) || user?._id==req.user?._id) {
+      if (notif?.some(checkUseralreadyliked) || user?._id == req.user?._id) {
         await UpdatePost(
           { _id: req.params.id },
           //@ts-ignore
@@ -109,12 +112,11 @@ export async function likeDislikeHandler(req: Request, res: Response) {
         res.json("The post has been liked");
       } else {
         const notif = {
-
-          user: currentuser?._id,
-
+          user: user?._id,
           name: currentuser?.name,
+          sender:currentuser?._id,
           post: req.params.id,
-          postPic:post?.img,
+          postPic: post?.img,
           message: `${currentuser?.name} liked your post `,
 
           profile: currentuser?.profilePic
@@ -125,7 +127,8 @@ export async function likeDislikeHandler(req: Request, res: Response) {
           //@ts-ignore
           { $push: { likes: req.user._id } }
         );
-        await UpdateUser({ _id: user?._id }, { $push: { notif: notif } })
+        await createNotif(notif)
+
         res.json("The post has been liked");
       }
     } else {

@@ -12,20 +12,20 @@ export async function createPost(input: postinput) {
 }
 
 export async function findPost(query: FilterQuery<PostDocument>) {
-  const post=await PostModel.findOne(query).lean();
-  if(post) return post
+  const post = await PostModel.findOne(query).lean();
+  if (post) return post
   return false
 }
 export async function findallPost(query: FilterQuery<PostDocument>) {
-  const post=await PostModel.find(query).sort({createdAt:-1})
- 
-  
-  if(post){
+  const post = await PostModel.find(query).sort({ createdAt: -1 })
+
+
+  if (post) {
     return post
-  }else{
-     return false
-  } 
- 
+  } else {
+    return false
+  }
+
 }
 
 export async function UpdatePost(
@@ -33,17 +33,17 @@ export async function UpdatePost(
   updatequery: UpdateQuery<PostDocument>
 ) {
   try {
-    
 
-      PostModel.updateOne(
+
+    PostModel.updateOne(
       filterquery,
       updatequery
     ).then((result) => {
-      return result ;
+      return result;
     })
-    .catch((err) => {
-      return err;
-    });
+      .catch((err) => {
+        return err;
+      });
   } catch (err) {
     return err;
   }
@@ -51,7 +51,7 @@ export async function UpdatePost(
 
 export async function DeletePost(postId: string) {
   try {
-     PostModel.deleteOne({ _id: postId })
+    PostModel.deleteOne({ _id: postId })
       .then(() => {
         return true;
       })

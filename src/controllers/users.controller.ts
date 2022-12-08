@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { omit } from "lodash";
 import UserModel, { UserDocument } from "../models/user.model";
+import { createNotif, findNotif } from "../services/notif.service";
 
 
 import { DeleteUser, findallUser, findUser, UpdateUser } from "../services/user.service";
@@ -88,12 +89,14 @@ export async function followHandler(req: {
     try {
       const user = await findUser({ _id: req.params.id })
       const currentuser = await findUser({ _id: req.user._id })
+      const notif=await findNotif({user:req.params.id})
+console.log(notif);
 
-      if (currentuser) {
-        const checkUseralreadyfollow = (obj: { user: { user: string; }; }) => obj.user == currentuser._id;
-console.log(user?.notif.some(checkUseralreadyfollow));
+      if (currentuser && notif) {
+        const checkUseralreadyfollow = (obj: { user: any; }) => obj.user == currentuser._id;
+console.log(notif.some(checkUseralreadyfollow));
 
-        if (user?.notif.some(checkUseralreadyfollow)) {
+        if (notif.some(checkUseralreadyfollow)) {
           await UpdateUser({ _id: req.params.id }, { $push: { followers: req.user._id } })
 
           await UpdateUser({ _id: req.user._id }, { $push: { following: req.params.id } })
@@ -102,7 +105,8 @@ console.log(user?.notif.some(checkUseralreadyfollow));
         } else {
           const notif = {
 
-            user: currentuser?._id,
+            user: user?._id,
+            sender:currentuser._id,
 
             name: currentuser.name,
 
@@ -114,8 +118,9 @@ console.log(user?.notif.some(checkUseralreadyfollow));
 
           //@ts-ignore
           if (!user?.followers.includes(req.user._id)) {
-
-            await UpdateUser({ _id: req.params.id }, { $push: { followers: req.user._id, notif: notif } })
+     
+            await createNotif(notif)
+            await UpdateUser({ _id: req.params.id }, { $push: { followers: req.user._id} })
 
             await UpdateUser({ _id: req.user._id }, { $push: { following: req.params.id } })
 
@@ -271,4 +276,43 @@ export async function filterHandler(req: { body: { search: string; }; } ,res:Res
     res.status(500).json('some error happpened in searching')
   }
  
+}
+
+export async function getFollowersHandler(req: Request,res:Response){
+  try{
+    findUser({_id:req.params.id})
+    .then(async (currentUser)=>{
+      if(!currentUser) return res.status(403).json('errpr happened user not found')
+      console.log(currentUser);
+      const followers = await Promise.all(
+        currentUser.followers.map((followerId) => {
+          return findUser({ _id: followerId });
+        })
+      );
+      res.status(200).json(followers)
+    })
+    .catch((error)=> res.status(500).json(error))  
+  }catch(err){
+    res.status(500).json('error happend ')
+  }
+}
+
+export async function getFollowingsHandler(req: Request,res:Response){
+  try {
+  findUser({_id:req.params.id})
+    .then(async (currentUser)=>{
+      if(!currentUser) return res.status(403).json('errpr happened user not found')
+
+      console.log(currentUser);
+      const followings = await Promise.all(
+        currentUser.following.map((followingId) => {
+          return findUser({ _id: followingId });
+        })
+      );
+      res.status(200).json(followings)
+    })
+    .catch((error)=> res.status(500).json(error))  
+  } catch (err) {
+    res.status(500).json(err);
+  }
 }
