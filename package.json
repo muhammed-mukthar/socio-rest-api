@@ -5,7 +5,8 @@
   "author": "Muhammed Mukthar",
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
-    "build": "tsc"
+    "build": "tsc",
+    "start": "npm run build && node ./build/src/index.js"
   },
   "dependencies": {
     "aws-sdk": "^2.1247.0",

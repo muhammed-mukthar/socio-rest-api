@@ -13,6 +13,7 @@ import cookieParser from 'cookie-parser'
 import helmet from 'helmet'
 import morgan  from  'morgan'
 import cors from 'cors'
+import { log } from 'console';
 dotenv.config()
 const app=express()
 const port = config.get<number>("port");
@@ -27,8 +28,9 @@ const port = config.get<number>("port");
 //     next();
 //   });
 
+
 //@ts-ignore
-app.use(cors("*"));
+app.use(cors({origin: process.env.CORS_VARS.split(", ")}));
 
 app.use(helmet())
 app.use(morgan('common'))
